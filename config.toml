@@ -1,0 +1,52 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+theme = "anatole"
+
+[params]
+title = "I'm Jiabing Wan."
+author = "Jiabing Wan"
+description = "Freedom and happiness"
+profilePicture = "images/profile.jpg"
+
+copyright = "2020-2021"
+
+singleDateFormat = "Mon, Jan 2, 2006"
+indexDateFormat = "Mon, Jan 2, 2006"
+listDateFormat = "Jan 2"
+readMore = true
+
+postSectionName = "blog"
+
+
+[menu]
+
+  [[menu.main]]
+  name = "Home"
+  identifier = "home"
+  weight = 100
+  url = "/"
+
+  [[menu.main]]
+  name = "Posts"
+  weight = 200
+  identifier = "posts"
+  url = "/post/"
+
+  [[menu.main]]
+  name = "About"
+  weight = 300
+  identifier = "about"
+  url = "/about/"
+
+[Languages]
+  [Languages.en]
+  title = "My blog"
+  weight = 1
+  LanguageName = "EN"
+
+  [Languages.cn]
+  title = "Mein blog"
+  description = "Ich bin Jane"
+  weight = 2
+  LanguageName = "nihao"
+
