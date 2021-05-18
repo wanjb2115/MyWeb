@@ -1,22 +1,20 @@
 baseURL = "http://example.org/"
-languageCode = "en-us"
+languageCode = "zh-CN"
+DefaultContentLanguage = "zh" 
 theme = "anatole"
-
-[params]
-title = "I'm Jiabing Wan."
-author = "Jiabing Wan"
-description = "Freedom and happiness"
-profilePicture = "images/profile.jpg"
-
-copyright = "2020-2021"
-
-singleDateFormat = "Mon, Jan 2, 2006"
-indexDateFormat = "Mon, Jan 2, 2006"
-listDateFormat = "Jan 2"
 readMore = true
 
-postSectionName = "blog"
+[params]
+title = "冰冰的小屋"
+author = "万家兵"
+description = "自由 | 快乐"
+profilePicture = "image/head.jpg"
+copyright = "2020-2021 鲁ICP备20020558号-1"
 
+singleDateFormat = "2006-01-02 Mon"
+indexDateFormat = "2006-01-02 Mon"
+listDateFormat = "01-02"
+readMore = true
 
 [menu]
 
@@ -30,7 +28,7 @@ postSectionName = "blog"
   name = "Posts"
   weight = 200
   identifier = "posts"
-  url = "/post/"
+  url = "/posts/"
 
   [[menu.main]]
   name = "About"
@@ -39,14 +37,58 @@ postSectionName = "blog"
   url = "/about/"
 
 [Languages]
-  [Languages.en]
-  title = "My blog"
-  weight = 1
-  LanguageName = "EN"
+  [Languages.zh]
+   weight = 1
+   LanguageName = "中文"
+   title = "冰冰的小屋"
+   author = "万家兵"
+   description = "自由 | 快乐"
+   profilePicture = "image/head.jpg"
+   copyright = "2020-2021 鲁ICP备20020558号-1"
 
-  [Languages.cn]
-  title = "Mein blog"
-  description = "Ich bin Jane"
-  weight = 2
-  LanguageName = "nihao"
+   [[Languages.zh.menu.main]]
+    name = "主页"
+    identifier = "home"
+    weight = 100
+    url = "/"
+
+    [[Languages.zh.menu.main]]
+    name = "博客"
+    weight = 200
+    identifier = "posts"
+    url = "/posts/"
+
+    [[Languages.zh.menu.main]]
+    name = "关于"
+    weight = 300
+    identifier = "about"
+    url = "/about/"
+
+   [Languages.en]
+   weight = 2
+   LanguageName = "EN"
+   title = "I'm Jiabing Wan."
+   author = "Jiabing Wan"
+   description = "Freedom and happiness"
+   profilePicture = "image/head.jpg"
+
+   [[Languages.en.menu.main]]
+    name = "Home"
+    identifier = "home"
+    weight = 100
+    url = "/en/"
+
+    [[Languages.en.menu.main]]
+    name = "Posts"
+    weight = 200
+    identifier = "posts"
+    url = "/en/posts/"
+
+    [[Languages.en.menu.main]]
+    name = "About"
+    weight = 300
+    identifier = "about"
+    url = "/en/about/"
+ 
+   
 
