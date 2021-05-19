@@ -7,24 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>2020-2021 鲁ICP备20020558号-1</copyright>
-    <lastBuildDate>Thu, 29 Apr 2021 16:30:48 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 19 May 2021 19:14:44 +0800</lastBuildDate>
     
 	<atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>博客，你好</title>
-      <link>http://example.org/posts/chinese/init-chinese/</link>
-      <pubDate>Thu, 29 Apr 2021 16:30:48 +0800</pubDate>
+      <title>Static</title>
+      <link>http://example.org/posts/zh/static/</link>
+      <pubDate>Wed, 19 May 2021 19:14:44 +0800</pubDate>
       
-      <guid>http://example.org/posts/chinese/init-chinese/</guid>
-      <description>写在前面的话 忙了好久终于把这个博客网站差不多给弄明白了， 用的是Hugo，这个框架还是在逛其他大佬的博客时偶然发现的。
-最近在公司忙Linux开源的工作，前几天也在学校里参加了飞致云的开源讲座， 受益匪浅，打造个人形象，记录个人成长，是时候为自己搭建一个博客网站了。
-小时候，父亲和爷爷都有记日记的习惯，在信息化发展迅速的今天，手写的 日记或不再成为潮流，博客网站或许成为了替代品，记录一下，未来回顾，蛮好的。
-既是技术博客，也是个人生活博客，总之，能记录自己的成长总是不错的。
-写给自己的话 坚持记录，坚持分享，无限进步。
-戒骄戒躁，一定不要是三分热度。
-2021.5.18 万家兵</description>
+      <guid>http://example.org/posts/zh/static/</guid>
+      <description>关于C语言中的关键字Static</description>
+    </item>
+    
+    <item>
+      <title>博客，你好</title>
+      <link>http://example.org/posts/zh/init-chinese/</link>
+      <pubDate>Tue, 18 May 2021 22:54:48 +0800</pubDate>
+      
+      <guid>http://example.org/posts/zh/init-chinese/</guid>
+      <description>关于博客的第一篇介绍</description>
     </item>
     
   </channel>

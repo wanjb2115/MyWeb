@@ -44,6 +44,7 @@ readMore = true
    author = "万家兵"
    description = "自由 | 快乐"
    profilePicture = "image/head.jpg"
+   readMore = true
    copyright = "2020-2021 鲁ICP备20020558号-1"
 
    [[Languages.zh.menu.main]]
@@ -69,6 +70,7 @@ readMore = true
    LanguageName = "EN"
    title = "I'm Jiabing Wan."
    author = "Jiabing Wan"
+   readMore = true
    description = "Freedom and happiness"
    profilePicture = "image/head.jpg"
 
