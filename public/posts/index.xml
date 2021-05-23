@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>2020-2021 鲁ICP备20020558号-1</copyright>
-    <lastBuildDate>Thu, 20 May 2021 18:29:38 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 23 May 2021 11:28:48 +0800</lastBuildDate>
     
 	<atom:link href="http://example.org/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>小企鹅的挑战</title>
+      <link>http://example.org/posts/zh/eudyptula_challenge/eudyptulachallenge/</link>
+      <pubDate>Sun, 23 May 2021 11:28:48 +0800</pubDate>
+      
+      <guid>http://example.org/posts/zh/eudyptula_challenge/eudyptulachallenge/</guid>
+      <description>想知道怎样成为一名合格的Linux内核贡献者吗？那就快来完成小企鹅的挑战吧！</description>
+    </item>
     
     <item>
       <title>浮生日记-2021/05</title>
