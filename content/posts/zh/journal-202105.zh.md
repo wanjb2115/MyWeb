@@ -19,8 +19,11 @@ DEAR EVAN HANSON，第一次看话剧，整体看下来质量挺不错，很佩�
 灯光完美，剧本优秀，舞台精致，演员大赞，一部好剧，理所应当。
 
 >Anybody Have A Map?
+
 >Waving Through A Window.
+
 >You will be found.
+
 >Good for you.
 
 >Today is going to be a great day. And here's why, because today, at least you are you. And that is enough.
