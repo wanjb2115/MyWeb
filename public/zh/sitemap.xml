@@ -4,7 +4,7 @@
   
   <url>
     <loc>http://example.org/categories/</loc>
-    <lastmod>2021-05-24T18:29:38+08:00</lastmod>
+    <lastmod>2021-05-25T18:29:38+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -19,7 +19,7 @@
   
   <url>
     <loc>http://example.org/posts/</loc>
-    <lastmod>2021-05-24T18:29:38+08:00</lastmod>
+    <lastmod>2021-05-25T18:29:38+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -34,7 +34,7 @@
   
   <url>
     <loc>http://example.org/tags/</loc>
-    <lastmod>2021-05-24T18:29:38+08:00</lastmod>
+    <lastmod>2021-05-25T18:29:38+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -49,7 +49,7 @@
   
   <url>
     <loc>http://example.org/</loc>
-    <lastmod>2021-05-24T18:29:38+08:00</lastmod>
+    <lastmod>2021-05-25T18:29:38+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -64,17 +64,17 @@
   
   <url>
     <loc>http://example.org/tags/%E6%B5%AE%E7%94%9F%E6%97%A5%E8%AE%B0/</loc>
-    <lastmod>2021-05-24T18:29:38+08:00</lastmod>
+    <lastmod>2021-05-25T18:29:38+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://example.org/categories/%E6%B5%AE%E7%94%9F%E6%97%A5%E8%AE%B0/</loc>
-    <lastmod>2021-05-24T18:29:38+08:00</lastmod>
+    <lastmod>2021-05-25T18:29:38+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/posts/zh/journal-202105/</loc>
-    <lastmod>2021-05-24T18:29:38+08:00</lastmod>
+    <loc>http://example.org/posts/zh/journal/journal-202105/</loc>
+    <lastmod>2021-05-25T18:29:38+08:00</lastmod>
   </url>
   
   <url>
@@ -98,7 +98,7 @@
   </url>
   
   <url>
-    <loc>http://example.org/posts/zh/static/</loc>
+    <loc>http://example.org/posts/zh/codinglanguage/static/</loc>
     <lastmod>2021-05-19T19:14:44+08:00</lastmod>
   </url>
   
@@ -115,6 +115,21 @@
   <url>
     <loc>http://example.org/posts/zh/init-chinese/</loc>
     <lastmod>2021-05-18T22:54:48+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/posts/zh/fromothers/mutt/</loc>
+    <lastmod>2020-02-22T19:14:44+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/%E8%A3%85%E6%9C%BA%E5%BF%85%E5%A4%87/</loc>
+    <lastmod>2020-02-22T19:14:44+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/%E8%BD%AC%E8%BD%BD/</loc>
+    <lastmod>2020-02-22T19:14:44+08:00</lastmod>
   </url>
   
 </urlset>

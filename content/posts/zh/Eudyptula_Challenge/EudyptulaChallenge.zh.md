@@ -7,6 +7,10 @@ categories: ["内核之旅"]
 Summary: "想知道怎样成为一名合格的Linux内核贡献者吗？那就快来完成小企鹅的挑战吧！"
 ---
 
+小企鹅的挑战来源于[eudyptula-challenge](http://eudyptula-challenge.org/)，由一系列的Linux内核编程练习组成，从最简单的“hello world”模块开始，一步一步去完成复杂的patch，并且被linux内核树接受。
+
+**完成小企鹅的挑战，你会对linux内核有更深入的理解，并且这是成为一个合格的Linux内核贡献者的最佳途径。**
+
 # 欢迎来到小企鹅的挑战
 
 这个挑战由一系列从简单开始的Linux内核编程练习组成，如果一切顺利，挑战到最后，你将有机会被选拔成为某个子系统的maintainer。 好吧，或许不是maintainer，但是你有能力指出一些喜爱的maintainer造成的一些错误，实际上，这比掌管它们要好玩得多。

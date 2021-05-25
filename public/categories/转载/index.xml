@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>转载 on 冰冰的小屋</title>
+    <link>http://example.org/categories/%E8%BD%AC%E8%BD%BD/</link>
+    <description>Recent content in 转载 on 冰冰的小屋</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>2020-2021 鲁ICP备20020558号-1</copyright>
+    <lastBuildDate>Sat, 22 Feb 2020 19:14:44 +0800</lastBuildDate>
+    
+	<atom:link href="http://example.org/categories/%E8%BD%AC%E8%BD%BD/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>[转]Mutt：命令行的邮件大师</title>
+      <link>http://example.org/posts/zh/fromothers/mutt/</link>
+      <pubDate>Sat, 22 Feb 2020 19:14:44 +0800</pubDate>
+      
+      <guid>http://example.org/posts/zh/fromothers/mutt/</guid>
+      <description>正式的介绍和配置Mutt</description>
+    </item>
+    
+  </channel>
+</rss>

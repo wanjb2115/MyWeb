@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html  dir="ltr" lang="zh" data-theme=""><head>
+    <title> 万家兵 | Static与存储类别 </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.68.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="自由 | 快乐">
+    
+    
+    
+    <link rel="stylesheet"
+        href="/css/style.min.43c0b080cb611c20f662cb7054828a33868d349cc715634a6f60ab7ca2305ecd.css"
+        integrity="sha256-Q8CwgMthHCD2YstwVIKKM4aNNJzHFWNKb2CrfKIwXs0="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    
+    <link rel="stylesheet"
+        href="/css/markupHighlight.min.cc84ed683057cc175ddfa738ea6ba2d5c882b95cb64f50bf9be918cb3791887b.css"
+        integrity="sha256-zITtaDBXzBdd36c46mui1ciCuVy2T1C/m&#43;kYyzeRiHs="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <link rel="canonical" href="/posts/zh/codinglanguage/static/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="/js/anatole-theme-switcher.min.2c507695a28320822cee065375387eac9bc9f3dfd49d4dcf84bbaca2b8efb30c.js"
+                integrity="sha256-LFB2laKDIIIs7gZTdTh&#43;rJvJ89/UnU3PhLusorjvsww="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Static与存储类别"/>
+<meta name="twitter:description" content="关于C语言中的关键字Static"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="/image/head.jpg" alt="profile picture">
+            <h3 title=""><a href="/">冰冰的小屋</a></h3>
+            <div class="description">
+                <p>自由 | 快乐</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; 万家兵  2020-2021 鲁ICP备20020558号-1 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">主页</a></li>
+        
+            
+            <li><a 
+                   href="/posts/"
+                        
+                   title="">博客</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">关于</a></li>
+        
+        
+            
+                <li><a href="/"
+                       title="中文">中文</a>
+                </li>
+            
+                <li><a href="/en/"
+                       title="EN">EN</a>
+                </li>
+            
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <div class="post-title">
+                <h3>Static与存储类别</h3>
+                
+            </div>
+
+            <h1 id="为什么对static感兴趣呢">为什么对Static感兴趣呢</h1>
+<p>最近在看内核代码的时候，发现其中的很多函数都使用static来声明，距离自己秋招八股文时间长了，
+竟一时想不起来static的作用，急忙翻开刚买的《C prime plus》来复习复习static关键字在C语言中的作用。</p>
+<h1 id="存储类别链接和内存管理">存储类别、链接和内存管理</h1>
+<p>非常奇怪，我在目录中搜了好久都没找到static所属的章节，既不在变量章节介绍，也不在函数章节介绍，搜了好久，
+static关键字相关的介绍在第12章“存储类别、链接和内存管理”。</p>
+<h2 id="存储类别">存储类别</h2>
+<p><strong>左值</strong>：指定对象的表达式被称为左值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>pc <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Behold a string literal!&#34;</span>;
+</code></pre></div><p>标识符pc是一个可以修改的左值，*pc是一个不可以修改的左值，
+const只能保证被PC指向的字符串内容不被修改，但是无法保证PC不指向别的字符串。</p>
+<h3 id="作用域">作用域</h3>
+<ul>
+<li>块作用域： 一对花括号括起来的代码区域。</li>
+<li>函数作用域 ： 仅用于goto语句的标签。这意味着一个标签首次出现在函数的内层块中，它的作用于也延伸至整个函数。</li>
+<li>函数原型作用域： 用于函数原型中的形参名（变量名）。</li>
+<li>文件作用域： 变量的定义在函数外面，具有文件作用域。 具有文件作用域的变量，从它定义处到该定义所在的文件末尾均可见。</li>
+</ul>
+<h3 id="链接">链接</h3>
+<p>C变量有三种链接属性：</p>
+<ul>
+<li>外部链接：外部链接变量可以在多文件程序中使用。</li>
+<li>内部链接：具有文件作用域的变量可以是外部链接或内部链接。内部链接变量只能在一个翻译单元中使用。</li>
+<li>无链接 ：具有块作用域、函数作用域或函数原型作用域的变量都是无链接变量。</li>
+</ul>
+<p>如何知道文件的作用域是内部链接还是外部链接？可以查看外部定义中是否使用了存储类别说明符<strong>static</strong>。</p>
+<blockquote>
+<p>简单来说，外部链接就是通俗来说的全局变量，而内部链接则是由static关键字声明的全局变量，仅允许在一个翻译单元中使用。
+而无链接就是通俗意义上的局部变量。</p>
+</blockquote>
+<p><em>翻译单元</em>： 编译器将源代码文件和所有的头文件都看成是一个包含信息的单独文件。</p>
+<h3 id="存储期">存储期</h3>
+<p>C变量有四种存储期：</p>
+<ul>
+<li>静态存储期：如果对象具有静态存储期，那么它在程序的执行期间一直存在。</li>
+<li>线程存储期： 用于并发程序设计，程序执行可以被分为多个线程。 具有线程存储期的对象，从被声明到线程结束一直存在。
+以关键字_Thread_local声明一个对象时，每个线程都获得该变量的私有备份。</li>
+<li>自动存储期：块作用域的变量通常都具有自动存储期。当程序进入定义这些变量的块时，为这些变量分配内存；当退出这个块时，释放刚才为变量分配的内存。变长数组稍有不同，它们的存储期从声明处到块的末尾，而不是从块的开始到块的末尾。</li>
+<li>动态分配存储期：动态分配的内存在调用malloc()或相关函数时存在，在调用free()后释放。这部分的内存由程序员来管理。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>存储类别</th>
+<th>存储期</th>
+<th>作用域</th>
+<th>链接</th>
+<th>声明方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自动</td>
+<td>自动</td>
+<td>块</td>
+<td>无</td>
+<td>块内</td>
+</tr>
+<tr>
+<td>寄存器</td>
+<td>自动</td>
+<td>块</td>
+<td>无</td>
+<td>块内，使用关键字register</td>
+</tr>
+<tr>
+<td>静态外部链接</td>
+<td>静态</td>
+<td>文件</td>
+<td>外部</td>
+<td>所有函数外</td>
+</tr>
+<tr>
+<td>静态内部链接</td>
+<td>静态</td>
+<td>文件</td>
+<td>内部</td>
+<td>所有函数外，使用关键字static</td>
+</tr>
+<tr>
+<td>静态无链接</td>
+<td>静态</td>
+<td>块</td>
+<td>无</td>
+<td>块内，使用关键字static</td>
+</tr>
+</tbody>
+</table>
+<h3 id="自动变量">自动变量</h3>
+<p><strong>属于自动存储类别的变量具有自动存储期、块作用域且无链接。</strong></p>
+<p>关键字auto是存储类别说明符，为了有意覆盖一个外部变量定义，或者强调不要把该变量改为其他存储类别。
+变量具有自动存储期意味着，程序在进入该变量声明所在的块时变量存在，变量在退出该块时变量消失。</p>
+<p>自动变量不会初始化，除非显式初始化它。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">void</span>)
+{
+    <span style="color:#66d9ef">int</span> repid;
+    <span style="color:#66d9ef">int</span> tents <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
+</code></pre></div><p>tents被初始化为5，但是repid变量是之前占用分配给repid的空间中任意的值。</p>
+<h3 id="寄存器变量">寄存器变量</h3>
+<p>寄存器变量存储在寄存器而非内存中，所以无法获取寄存器变量的地址。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">void</span>)
+{
+    <span style="color:#66d9ef">register</span> <span style="color:#66d9ef">int</span> quick;
+</code></pre></div><p>在函数头中使用关键字register，便可以请求形参是寄存器变量。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> macho(<span style="color:#66d9ef">register</span> <span style="color:#66d9ef">int</span> n)
+</code></pre></div><h3 id="块作用域的静态变量">块作用域的静态变量</h3>
+<p>静态变量的意思是该变量在内存中原地不动，并不是说它的值不变。在块中创建具有静态存储期的变量，在程序离开它们所在的函数后，这些变量不会消失。</p>
+<p><em>如果未显式初始化静态变量，它们会被初始化为0.</em></p>
+<p>静态变量和外部变量在程序被载入内存时已执行完毕，不能在函数的形参中使用static。</p>
+<h3 id="外部链接的静态变量">外部链接的静态变量</h3>
+<p>外部链接的静态变量具有文件作用域、外部链接和静态存储期。</p>
+<ul>
+<li><em>如果未初始化外部变量，它们会被自动初始化为0.</em></li>
+<li><em>只能使用常量表达式初始化文件作用域变量</em></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> tern <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+main()
+{
+    <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">int</span> tern;
+</code></pre></div><p>第一次声明被称为定义式声明，第二次声明被称为引用式声明。不要使用extern创建外部定义，只能用它来引用现有的外部定义。</p>
+<h3 id="内部链接的静态变量">内部链接的静态变量</h3>
+<p>内部链接的静态变量具有静态存储期、文件作用域和内部链接。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> traveler <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> stayhome <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">int</span> traveler;
+    <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">int</span> stayhome;
+</code></pre></div><h3 id="多文件">多文件</h3>
+<p>只有当程序由多个翻译单元组成时，才能体现内部链接与外部链接的区别。</p>
+<p>C通过在一个文件中进行定义式声明，然后在其他文件中进行引用式声明来实现共享。除了一个定义式声明外，其他声明都要使用extern关键字。而且，只有定义式声明才能初始化变量。</p>
+<h3 id="存储类别说明符">存储类别说明符</h3>
+<ul>
+<li>auto： 表明变量是自动存储期，只用于块作用域的变量声明中。</li>
+<li>register： 只用于块作用域的变量，将变量归为存储器存储类别，请求最快的速度访问变量。同时还保护了该变量的地址。</li>
+<li>static： 创建的对象具有静态存储期。只要程序在运行对象就存在并保留其值，但是只有执行块内的代码时，才能通过标识符访问。</li>
+<li>extern： 说明声明的变量定义在别处。</li>
+</ul>
+<h3 id="存储类别和函数">存储类别和函数</h3>
+<p>外部函数可以被其他文件的函数访问，但是静态函数只能用于其定义所在的文件。</p>
+<h3 id="存储类别的选择">存储类别的选择</h3>
+<p>保护性程序设计的黄金法则是：“按需知道”原则。尽量在函数内部解决该函数的任务，只共享那些需要共享的变量。</p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                <span class="separator"><a class="category" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span>
+                <span class="separator"><a class="tag" href="/tags/c%E8%AF%AD%E8%A8%80/">C语言</a></span>
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
