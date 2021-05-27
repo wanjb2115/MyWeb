@@ -21,5 +21,14 @@
       <description>想知道怎样成为一名合格的Linux内核贡献者吗？那就快来完成小企鹅的挑战吧！</description>
     </item>
     
+    <item>
+      <title>[转]linux进程fork()</title>
+      <link>http://example.org/posts/zh/fromothers/fork/</link>
+      <pubDate>Sat, 22 Feb 2020 19:14:44 +0800</pubDate>
+      
+      <guid>http://example.org/posts/zh/fromothers/fork/</guid>
+      <description>Linux进程中fork()过程</description>
+    </item>
+    
   </channel>
 </rss>

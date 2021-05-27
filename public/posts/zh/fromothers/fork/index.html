@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html  dir="ltr" lang="zh" data-theme=""><head>
+    <title> 万家兵 | [转]linux进程fork() </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.68.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="自由 | 快乐">
+    
+    
+    
+    <link rel="stylesheet"
+        href="/css/style.min.43c0b080cb611c20f662cb7054828a33868d349cc715634a6f60ab7ca2305ecd.css"
+        integrity="sha256-Q8CwgMthHCD2YstwVIKKM4aNNJzHFWNKb2CrfKIwXs0="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    
+    <link rel="stylesheet"
+        href="/css/markupHighlight.min.cc84ed683057cc175ddfa738ea6ba2d5c882b95cb64f50bf9be918cb3791887b.css"
+        integrity="sha256-zITtaDBXzBdd36c46mui1ciCuVy2T1C/m&#43;kYyzeRiHs="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <link rel="canonical" href="/posts/zh/fromothers/fork/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="/js/anatole-theme-switcher.min.2c507695a28320822cee065375387eac9bc9f3dfd49d4dcf84bbaca2b8efb30c.js"
+                integrity="sha256-LFB2laKDIIIs7gZTdTh&#43;rJvJ89/UnU3PhLusorjvsww="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="[转]linux进程fork()"/>
+<meta name="twitter:description" content="Linux进程中fork()过程"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="/image/head.jpg" alt="profile picture">
+            <h3 title=""><a href="/">冰冰的小屋</a></h3>
+            <div class="description">
+                <p>自由 | 快乐</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; 万家兵  2020-2021 鲁ICP备20020558号-1 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">主页</a></li>
+        
+            
+            <li><a 
+                   href="/posts/"
+                        
+                   title="">博客</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">关于</a></li>
+        
+        
+            
+                <li><a href="/"
+                       title="中文">中文</a>
+                </li>
+            
+                <li><a href="/en/"
+                       title="EN">EN</a>
+                </li>
+            
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <div class="post-title">
+                <h3>[转]linux进程fork()</h3>
+                
+            </div>
+
+            <p><strong>转载自<a href="https://zhuanlan.zhihu.com/p/53527981">linux 进程 fork()</a>，仅供学习参考，如有侵权，请联系作者删除</strong></p>
+<p>参考：<a href="https://www.bilibili.com/video/av29268873/?p=24">https://www.bilibili.com/video/av29268873/?p=24</a></p>
+<p>如果对进程没有了解的话，欢迎提前参考：<a href="https://zhuanlan.zhihu.com/p/51194025">何柄融：操作系统 进程是什么 进程的5种状态 进程的通信方式</a></p>
+<p>进程控制原语包括：进程的建立、进程的撤销、进程的等待和进程的唤醒。</p>
+<p>原语的意思就是不加任何包裹，比如java，c++对操作进程线程封装好的函数，这就不叫原语。在linux当中就是可以直接创建或者销毁进程的最原始的函数，没有任何包裹性。</p>
+<p>fork，在英语用译为叉子，形状像Y，反过来就如下图：</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/fork.jpg" alt="fork"></p>
+<p>就是本来只有一个进行app,然后它调用了fork()函数，然后就产生了子进程，原来的进程叫父进程。这个子进程也是进程，但凡是进程，都有自己的虚拟地址空间。虚拟地址空间是从0到4G的大小，其中3-4G是属于内核的。创建完子进程后，父进程继续运行app（即原来的进程）的代码，刚创建出来的子进程拥有和父进程完全一样的代码段，数据段，也就是说完完全全拷贝了一份父进程，和父进程完全一样。即clone父进程0-3G的内容，而3-4G的kernel只需要重新映射一下到物理地址的kernel即可。但是操作系统要如何区分这两个进程呢？答案就是进程ID，即pid。pid是存储在PCB当中的类似身份证的东西。子进程会clone父进程的PCB到子进程，但是PCB里的pid会从操作系统中获取，得到新的pid。PCB存储在3-4G的内核中。 如下图：</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/clone.jpg" alt="clone"></p>
+<p>fork()完以后，父进程和子进程由于有着同样的数据段和代码段，栈，PCB也大部分相同，所以两个进程就会干着同样的事情，这样对我们没有意义，所以需要识别哪个是父进程，哪个是子进程，然后让父进程接着干原来的事，子进程去干新的事情。</p>
+<p>然后我们通过代码来观察：</p>
+<p>这里是直接使用视频的案例：</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/fork_c1.jpg" alt="fork_c1"></p>
+<p>这段代码在linux中运行，fork函数有两次返回，即调用一次，返回两次。在父进程返回子进程的pid，在子进程返回0，如果返回负数则表明fork失败。所以，我们根据返回值来判断当前进程是父进程还是子进程。</p>
+<p>结果就是：</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/fork_c1_answer.jpg" alt="fork_c1_answer"></p>
+<p>然后ps aux显示目前正在运行的进程：</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/ps-aux.png" alt="ps-aux"></p>
+<p>pid为4296的是父进程，4297的是子进程。</p>
+<p>解释：这段程序本身就是一个进程，然后它创建了一个子进程，它本身变为一个父进程。但是两个进程运行的都是同一段程序代码。当父进程运行时，fork返回大于0的数，那么我们就输出相应字符。而子进程运行时，fork返回0，那么我们再输出另外的字符。所以就有了上面的现象。</p>
+<p>然后修改一下程序：</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/fork_c2.jpg" alt="fork_c2"></p>
+<p>也就是让父进程休眠1s，一直打印，子进程休眠3s,一直打印。</p>
+<p>然后输出如下：</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/fork_c2_answer.jpg" alt="fork_c2_answer"></p>
+<p>明显是父进程打印得比较快。很符合所学知识，</p>
+<p>然后kill 掉子进程，即 kill pid，然后就可以发现子进程没有输出了，也可以确认pid大1的是子进程。</p>
+<p>也就是说，<strong>我们只能通过fork的返回值来判断当前进程是父进程还是子进程。</strong></p>
+<p>其实，fork底层是调用了内核的函数来实现fork的功能的，即先create()先创建进程，此时进程内容为空，然后clone()复制父进程的内容到子进程中，此时子进程就诞生了，接着父进程就return返回了。**而子进程诞生后，是直接运行return返回的，然后接着执行后面的程序，这里注意：子进程是不会执行前面父进程已经执行过的程序了得，因为PCB中记录了当前进程运行到哪里，而子进程又是完全拷贝过来的，所以PCB的程序计数器也是和父进程相同的，所以是从fork()后面的程序继续执行。**此时就按照前面的规则进行判断返回。如下图所示：</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/create.jpg" alt="create"></p>
+<p>然后接下来介绍两个进程相关的函数，getpid()和getppid()</p>
+<p>getpid()返回的是当前进程的pid,getppid()返回的是当前进程的父进程的pid。那前面说的父进程的父进程是啥呢？是shell。因为我们是子啊shell中 ./ 运行程序才创建起刚才的父进程的，所以shell是该父进程的父进程。</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/fork_c3.jpg" alt="fork_c3"></p>
+<p>大家可以试着跟着视频写一波代码。</p>
+<p>然后大家注意，如果此时在fork()前有变量n，那么创建子进程后，父进程和子进程的n不是同一个n，但是虚拟地址是一样的，因为也是完全拷贝父进程的，而进程间的虚拟地址都是独立的，对应的实际物理地址肯定是不同的，当你在两个进程中改变这个变量时，也可以发现这两个是不一样的，对进程线程有一定了解的都应该很好了解。</p>
+<p>接着来介绍一个读时共享，写时复制的策略：如下图</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/copy_on_write.jpg" alt="copy_on_write"></p>
+<p>fork()的时候，父进程的虚拟地址映射着物理内存的实际的物理地址，clone()的时候，并不是在物理地址中直接再复制一份和父进程一样的物理内存块，而是子进程的虚拟地址也直接映射到同一物理内存块中，这就是<strong>读时共享</strong>。那这样的话不是就共享变量了吗？不就和前面说的矛盾了吗？ 关键：当你操作这个物理内存块时（比如修改变量的值），再复制该部分的实际物理内存到子进程中，并不是全部复制。这就是<strong>写时复制</strong>。所以，当你在后面的程序中操作遍历n时，就会另辟内存块给子进程，表示这两者的独立。这就是读时共享，写时复制。</p>
+<p>优点：可以减少实际物理内存的开销，也减少了完全复制一份内存块时cpu等资源的开销。同时减少使用的时间。所以linux引入了copy on write的机制。</p>
+<p>然后看看视频最后的一个demo:</p>
+<p><img src="http://wanjiabing.top/posts/fork.zh.md/fork_c4.jpg" alt="fork_c4"></p>
+<p>程序功能就是：父进程不断地创建子进程，子进程经过30s后就结束进程。然后就看这引起的后果：</p>
+<p>进程不断创建，ps aux和输出都非常巨大，这样由于pcb和变量的不断产生，内存消耗会很大，然后关键是cpu还要分配时间片给每个进程中的线程（此进程为一进程对应1线程），然后系统就会变得很卡，以至于其它不相关的进程操作起来也非常卡顿，因为cpu要在海量的进程中切换到你比较费时。</p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                <span class="separator"><a class="category" href="/categories/%E5%86%85%E6%A0%B8%E4%B9%8B%E6%97%85/">内核之旅</a></span>
+                <span class="separator"><a class="tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a></span>
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>

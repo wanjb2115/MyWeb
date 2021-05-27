@@ -49,6 +49,15 @@
     </item>
     
     <item>
+      <title>[转]linux进程fork()</title>
+      <link>http://example.org/posts/zh/fromothers/fork/</link>
+      <pubDate>Sat, 22 Feb 2020 19:14:44 +0800</pubDate>
+      
+      <guid>http://example.org/posts/zh/fromothers/fork/</guid>
+      <description>Linux进程中fork()过程</description>
+    </item>
+    
+    <item>
       <title>[转]Mutt：命令行的邮件大师</title>
       <link>http://example.org/posts/zh/fromothers/mutt/</link>
       <pubDate>Sat, 22 Feb 2020 19:14:44 +0800</pubDate>

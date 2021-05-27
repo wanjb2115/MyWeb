@@ -2,11 +2,11 @@
 title: "[转]Mutt：命令行的邮件大师"
 date: 2020-02-22T19:14:44+08:00
 draft: true
-tags: ["装机必备"]
-categories: ["转载"]
+tags: ["转载"]
+categories: ["装机必备"]
 Summary: "正式的介绍和配置Mutt"
 ---
-**转载自[正式的介绍「Mutt」：命令行的邮件大师 (一文详解)](https://segmentfault.com/a/1190000018131615)**
+**转载自[正式的介绍「Mutt」：命令行的邮件大师 (一文详解)](https://segmentfault.com/a/1190000018131615)，仅供学习参考，如有侵权，请联系作者删除**
 
 为什么要用Mutt？
 这个世界已经有了成百上千的漂亮邮件客户端，为什么还要用命令行里的？
@@ -20,7 +20,9 @@ Mutt的可配置性，强如Vim。配置起来也和Vim差不多，有专门的~
 
 ## Mutt的模块搭配方案
 **mutt + fetchmail + msmtp + procmail**
+
 [参考Arch Wiki：Mutt (极详细，但对人类不友好)](https://wiki.archlinux.org/index.php/mutt)
+
 安装：
 ```bash
 # Mac
