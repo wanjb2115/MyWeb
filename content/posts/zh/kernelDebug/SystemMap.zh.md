@@ -44,5 +44,37 @@ Kernel panic的行为是可以通过设置运行时系统配置，例如hung tas
 
 注意在logs中kernel调用栈内，，kernel会寻找与要分析的地址最接近的符号，由于内联，静态和优化，并非所有的函数符号都是可用的，因此有时候报告的函数名称并不是故障所在的位置。
 
+如何调试kernel panics和Oopes
+---
+```bash
+67.994406] Unable to handle kernel paging request at virtual address 02120bc4
+[   67.994495] pgd = 94240000
+[   67.994553] [02120bc4] *pgd=00000000
+[   67.994624] Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+[   67.994926] CPU: 0    Not tainted  (3.8.13.23-XXXXXXXX #1)
+[   67.994996] PC is at add_range+0x14/0x6c
+[   67.995056] LR is at XXXXXXX+0x38/0x44
+[   67.995117] pc : [<80049F3C>]    lr : [<8004a1ec>]    psr: 20000013
+[   67.995117] sp : 9423fd90  ip : 9423fda8  fp : 9423fda4
+[   67.995176] r10: 00000000  r9 : 9423ff60  r8 : 8000da84
+[   67.995233] r7 : 000041fd  r6 : 00000081  r5 : aa068088  r4 : aa068088
+[   67.995290] r3 : ac8ceb80  r2 : 021ab618  r1 : 00000000  r0 : 02120bc0
+[   67.995348] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
+[   67.995406] Control: 10c5387d  Table: 2424004a  DAC: 00000015
+[   67.995462] Process cat (pid: 1352, stack limit = 0x9423e238)
+[   67.995518] Stack: (0x9423fd90 to 0x94240000)
+[   67.995577] fd80:                                     aa068088 aa068088 9423fdb4 9423fda8
 
+```
 
+这是一个kernel在“add_range”函数崩溃时的kernel回溯，让我们来一步一步地分析。
+
+1. Crash每次都发生在下面的位置：
+```bash
+PC is at add_range +0x14/0x6c
+```
+2. 筛选(grep)/寻找 add_range()函数在System.map文件中，记录下符号名称对应的地址，例如80049f28
+```bash
+#Linux-Kernel # grep add_range System.map 
+80049f28 T add_range
+```

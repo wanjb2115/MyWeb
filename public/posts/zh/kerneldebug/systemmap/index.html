@@ -158,7 +158,36 @@
 <p>更多细节信息可以参考：<a href="https://en.wikipedia.org/wiki/System.map">System.map</a>.</p>
 <p>注意：System.map内的地址可能每次都会变化，换句话说，每次构建kernel都会生成新的System.map，但是必须有已报告kernel panic/Oopes的同一Linux内核的System.map才能调试问题。</p>
 <p>注意在logs中kernel调用栈内，，kernel会寻找与要分析的地址最接近的符号，由于内联，静态和优化，并非所有的函数符号都是可用的，因此有时候报告的函数名称并不是故障所在的位置。</p>
-</div>
+<h2 id="如何调试kernel-panics和oopes">如何调试kernel panics和Oopes</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">67.994406<span style="color:#f92672">]</span> Unable to handle kernel paging request at virtual address 02120bc4
+<span style="color:#f92672">[</span>   67.994495<span style="color:#f92672">]</span> pgd <span style="color:#f92672">=</span> <span style="color:#ae81ff">94240000</span>
+<span style="color:#f92672">[</span>   67.994553<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>02120bc4<span style="color:#f92672">]</span> *pgd<span style="color:#f92672">=</span><span style="color:#ae81ff">00000000</span>
+<span style="color:#f92672">[</span>   67.994624<span style="color:#f92672">]</span> Internal error: Oops: <span style="color:#ae81ff">5</span> <span style="color:#f92672">[</span><span style="color:#75715e">#1] PREEMPT SMP ARM</span>
+<span style="color:#f92672">[</span>   67.994926<span style="color:#f92672">]</span> CPU: <span style="color:#ae81ff">0</span>    Not tainted  <span style="color:#f92672">(</span>3.8.13.23-XXXXXXXX <span style="color:#75715e">#1)</span>
+<span style="color:#f92672">[</span>   67.994996<span style="color:#f92672">]</span> PC is at add_range+0x14/0x6c
+<span style="color:#f92672">[</span>   67.995056<span style="color:#f92672">]</span> LR is at XXXXXXX+0x38/0x44
+<span style="color:#f92672">[</span>   67.995117<span style="color:#f92672">]</span> pc : <span style="color:#f92672">[</span>&lt;80049F3C&gt;<span style="color:#f92672">]</span>    lr : <span style="color:#f92672">[</span>&lt;8004a1ec&gt;<span style="color:#f92672">]</span>    psr: <span style="color:#ae81ff">20000013</span>
+<span style="color:#f92672">[</span>   67.995117<span style="color:#f92672">]</span> sp : 9423fd90  ip : 9423fda8  fp : 9423fda4
+<span style="color:#f92672">[</span>   67.995176<span style="color:#f92672">]</span> r10: <span style="color:#ae81ff">00000000</span>  r9 : 9423ff60  r8 : 8000da84
+<span style="color:#f92672">[</span>   67.995233<span style="color:#f92672">]</span> r7 : 000041fd  r6 : <span style="color:#ae81ff">00000081</span>  r5 : aa068088  r4 : aa068088
+<span style="color:#f92672">[</span>   67.995290<span style="color:#f92672">]</span> r3 : ac8ceb80  r2 : 021ab618  r1 : <span style="color:#ae81ff">00000000</span>  r0 : 02120bc0
+<span style="color:#f92672">[</span>   67.995348<span style="color:#f92672">]</span> Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
+<span style="color:#f92672">[</span>   67.995406<span style="color:#f92672">]</span> Control: 10c5387d  Table: 2424004a  DAC: <span style="color:#ae81ff">00000015</span>
+<span style="color:#f92672">[</span>   67.995462<span style="color:#f92672">]</span> Process cat <span style="color:#f92672">(</span>pid: 1352, stack limit <span style="color:#f92672">=</span> 0x9423e238<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>   67.995518<span style="color:#f92672">]</span> Stack: <span style="color:#f92672">(</span>0x9423fd90 to 0x94240000<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>   67.995577<span style="color:#f92672">]</span> fd80:                                     aa068088 aa068088 9423fdb4 9423fda8
+
+</code></pre></div><p>这是一个kernel在“add_range”函数崩溃时的kernel回溯，让我们来一步一步地分析。</p>
+<ol>
+<li>Crash每次都发生在下面的位置：</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PC is at add_range +0x14/0x6c
+</code></pre></div><ol start="2">
+<li>筛选(grep)/寻找 add_range()函数在System.map文件中，记录下符号名称对应的地址，例如80049f28</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#Linux-Kernel # grep add_range System.map</span> 
+80049f28 T add_range
+</code></pre></div></div>
         <div class="post-footer">
             <div class="info">
                 <span class="separator"><a class="category" href="/categories/%E5%86%85%E6%A0%B8%E4%B9%8B%E6%97%85/">内核之旅</a></span>
