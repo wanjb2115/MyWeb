@@ -177,7 +177,7 @@
 <span style="color:#f92672">[</span>   67.995518<span style="color:#f92672">]</span> Stack: <span style="color:#f92672">(</span>0x9423fd90 to 0x94240000<span style="color:#f92672">)</span>
 <span style="color:#f92672">[</span>   67.995577<span style="color:#f92672">]</span> fd80:                                     aa068088 aa068088 9423fdb4 9423fda8
 
-</code></pre></div><p>这是一个kernel在“add_range”函数崩溃时的kernel回溯，让我们来一步一步地分析。</p>
+</code></pre></div><p>这是一个kernel在“add_range”函数崩溃时的kernel调用栈，让我们来一步一步地分析。</p>
 <ol>
 <li>Crash每次都发生在下面的位置：</li>
 </ol>
@@ -187,7 +187,214 @@
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#Linux-Kernel # grep add_range System.map</span> 
 80049f28 T add_range
-</code></pre></div></div>
+</code></pre></div><ol start="3">
+<li>
+<p>用add_range符号地址替换符号名称。&ldquo;add_range&quot;+0x14 = 80049f28 + 0x14 = 80049F3C</p>
+</li>
+<li>
+<p>&ldquo;80049F3C&quot;也应该和kernel调用栈中的PC地址一致，这正说明我正使用的Kernel版本与出错的kernel版本一致。</p>
+</li>
+<li>
+<p>运行objdump结合vmlinux得到反汇编和程序的更多细节。</p>
+</li>
+</ol>
+<p><strong>objdump</strong>: 一个展示关于object文件不同种类信息的程序。例如，它可以被用作反汇编器以汇编的形式查看正在运行的程序。</p>
+<p><strong>vmlinux</strong>： 一个包含Linux支持的object文件形式的Linux kernel静态链接可执行文件。vmlinux常用来做Kernel调试，符号表生成和其他用途。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#objdump -D -S --show-raw-insn --prefix-addresses --line-numbers vmlinux &gt; objdump</span>
+</code></pre></div><ol start="6">
+<li>在vmlinux.object寻找&quot;add_range&rdquo;，并且寻找上面计算的PC地址。80049F3C</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">80049F3C &lt;add_Range+0x14&gt; e5903004  ldr     r3, <span style="color:#f92672">[</span>r0, <span style="color:#75715e">#4]</span>
+</code></pre></div><ol start="7">
+<li>崩溃点可以被识别出来，如下：</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ldr     r3, <span style="color:#f92672">[</span>r0, <span style="color:#75715e">#4] = r0+4 = 02120bc0+4 = 02120bc4 /*replace r0 with r0 register value from the Back Traces*</span>
+</code></pre></div><ol start="8">
+<li>哇!这与错误日志中的地址相同</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Unable to handle kernel paging request at virtual address 02120bc4
+</code></pre></div><p>总结：这里r0寄存器指向一个无效地址，从反汇编中可以找出r0寄存器指的地址以及查找出为什么r0指向了一个无效的地址。</p>
+<h1 id="使用gdb寻找你的kernel-panic或oops的位置">使用GDB寻找你的kernel panic或oops的位置</h1>
+<hr>
+<p>一个寻找出现kernel panic或oops代码行快速和简单的方式是使用GDB的list命令。你可以这样做。</p>
+<p>让我们假设你的panic/oops信息如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>  174.507084<span style="color:#f92672">]</span> Stack:
+<span style="color:#f92672">[</span>  174.507163<span style="color:#f92672">]</span> 
+ce0bd8ac <span style="color:#ae81ff">00000008</span> <span style="color:#ae81ff">00000000</span> ce4a7e90 c039ce30 ce0bd8ac c0718b04 c07185a0
+<span style="color:#f92672">[</span>  174.507380<span style="color:#f92672">]</span> 
+ce4a7ea0 c0398f22 ce0bd8ac c0718b04 ce4a7eb0 c037deee ce0bd8e0 ce0bd8ac
+<span style="color:#f92672">[</span>  174.507597<span style="color:#f92672">]</span> 
+ce4a7ec0 c037dfe0 c07185a0 ce0bd8ac ce4a7ed4 c037d353 ce0bd8ac ce0bd8ac
+<span style="color:#f92672">[</span>  174.507888<span style="color:#f92672">]</span> Call Trace:
+<span style="color:#f92672">[</span>  174.508125<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c039ce30&gt;<span style="color:#f92672">]</span> ? sd_remove+0x20/0x70
+<span style="color:#f92672">[</span>  174.508235<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c0398f22&gt;<span style="color:#f92672">]</span> ? scsi_bus_remove+0x32/0x40
+<span style="color:#f92672">[</span>  174.508326<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c037deee&gt;<span style="color:#f92672">]</span> ? __device_release_driver+0x3e/0x70
+<span style="color:#f92672">[</span>  174.508421<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c037dfe0&gt;<span style="color:#f92672">]</span> ? device_release_driver+0x20/0x40
+<span style="color:#f92672">[</span>  174.508514<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c037d353&gt;<span style="color:#f92672">]</span> ? bus_remove_device+0x73/0x90
+<span style="color:#f92672">[</span>  174.508606<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c037bccf&gt;<span style="color:#f92672">]</span> ? device_del+0xef/0x150
+<span style="color:#f92672">[</span>  174.508693<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c0399207&gt;<span style="color:#f92672">]</span> ? __scsi_remove_device+0x47/0x80
+<span style="color:#f92672">[</span>  174.508786<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c0399262&gt;<span style="color:#f92672">]</span> ? scsi_remove_device+0x22/0x40
+<span style="color:#f92672">[</span>  174.508877<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c0399324&gt;<span style="color:#f92672">]</span> ? __scsi_remove_target+0x94/0xd0
+<span style="color:#f92672">[</span>  174.508969<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c03993c0&gt;<span style="color:#f92672">]</span> ? __remove_child+0x0/0x20
+<span style="color:#f92672">[</span>  174.509060<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c03993d7&gt;<span style="color:#f92672">]</span> ? __remove_child+0x17/0x20
+<span style="color:#f92672">[</span>  174.509148<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c037b868&gt;<span style="color:#f92672">]</span> ? device_for_each_child+0x38/0x60
+<span style="color:#f92672">[</span>  174.509241<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c039938f&gt;<span style="color:#f92672">]</span> ? scsi_remove_target+0x2f/0x60
+<span style="color:#f92672">[</span>  174.509393<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;d0c38907&gt;<span style="color:#f92672">]</span> ? __iscsi_unbind_session+0x77/0xa0
+<span style="color:#f92672">[</span>scsi_transport_iscsi<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>  174.509699<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c015272e&gt;<span style="color:#f92672">]</span> ? run_workqueue+0x6e/0x140
+<span style="color:#f92672">[</span>  174.509801<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;d0c38890&gt;<span style="color:#f92672">]</span> ? __iscsi_unbind_session+0x0/0xa0
+<span style="color:#f92672">[</span>scsi_transport_iscsi<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>  174.509977<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c0152888&gt;<span style="color:#f92672">]</span> ? worker_thread+0x88/0xe0
+<span style="color:#f92672">[</span>  174.510047<span style="color:#f92672">]</span> 
+<span style="color:#f92672">[</span>&lt;c01566a0&gt;<span style="color:#f92672">]</span> ? autoremove_wake_function+0x0/0x40
+</code></pre></div><p>如果你想知道哪一行代码代表sd_remove+0x20/0x70，进入你的kernel目录树，在包含函数sd_remove()的&rdquo;.o&quot;文件运行gdb，这个例子中是&quot;sd.o&rdquo;，然后运行gdb的list命令，(gdb) list *(function+0xoffset), 在这个例子中function是sd_remove()，offset是0x20, gdb会告诉你发生panic或oops的行号。在大多数情况下，这都是可信的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#gdb sd.o</span>
+gdb<span style="color:#f92672">)</span>list *<span style="color:#f92672">(</span>sd_remove+0x20<span style="color:#f92672">)</span>
+0x1650 is in sd_remove
+<span style="color:#f92672">(</span>Kernel/linux-xxx/drivers/scsi/sd.c:2125<span style="color:#f92672">)</span>.
+<span style="color:#ae81ff">2120</span>    static int sd_remove<span style="color:#f92672">(</span>struct device *dev<span style="color:#f92672">)</span>
+<span style="color:#ae81ff">2121</span>    <span style="color:#f92672">{</span>
+<span style="color:#ae81ff">2122</span>            struct scsi_disk *sdkp;
+<span style="color:#ae81ff">2123</span>    
+<span style="color:#ae81ff">2124</span>            async_synchronize_full<span style="color:#f92672">()</span>;
+<span style="color:#ae81ff">2125</span>            sdkp <span style="color:#f92672">=</span> dev_get_drvdata<span style="color:#f92672">(</span>dev<span style="color:#f92672">)</span>;
+<span style="color:#ae81ff">2126</span>           
+blk_queue_prep_rq<span style="color:#f92672">(</span>sdkp-&gt;device-&gt;request_queue, scsi_prep_fn<span style="color:#f92672">)</span>;
+<span style="color:#ae81ff">2127</span>            device_del<span style="color:#f92672">(</span>&amp;sdkp-&gt;dev<span style="color:#f92672">)</span>;
+<span style="color:#ae81ff">2128</span>            del_gendisk<span style="color:#f92672">(</span>sdkp-&gt;disk<span style="color:#f92672">)</span>;
+<span style="color:#ae81ff">2129</span>            sd_shutdown<span style="color:#f92672">(</span>dev<span style="color:#f92672">)</span>;
+<span style="color:#f92672">(</span>gdb<span style="color:#f92672">)</span>
+
+so dev_get_drvdata<span style="color:#f92672">()</span>is the <span style="color:#66d9ef">function</span> where crash has been happened and Lets analyze why dev_get_drvdata<span style="color:#f92672">(</span>dev<span style="color:#f92672">)</span>is crashing.
+</code></pre></div><h1 id="反汇编kernel">反汇编kernel</h1>
+<hr>
+<p>交叉工具是必须的。</p>
+<h2 id="objdump功能">objdump功能</h2>
+<p>主要功能</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">arm-none-linux-gnueabi-objdump –dr vmlinux  /*If We have object code handy <span style="color:#66d9ef">then</span>, we can disassemble the individual object file also like objdump -S panic.o<span style="color:#e6db74">&#34;
+</span></code></pre></div><h2 id="gdb在vmlinux">gdb在vmlinux</h2>
+<p>可以使用gdb在vmlinux镜像中反汇编一个已构建的kernel。这在得到一个kernel oops信息和栈转储（一种可以反汇编object代码和查看oops发生位置的信息）时是十分有效的。例如，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#arm-none-linux-gnueabi-gdb –silent vmlinux</span>
+<span style="color:#75715e">#disassemble printk</span>
+Dump of assembler code <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">function</span> printk:
+0xffffffff8023dce0 &lt;printk+0&gt;:  sub    $0xd8,%rsp
+0xffffffff8023dce7 &lt;printk+7&gt;:  lea    0xe0<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>,%rax
+0xffffffff8023dcef &lt;printk+15&gt;: mov    %rsi,0x28<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dcf4 &lt;printk+20&gt;: mov    %rsp,%rsi
+0xffffffff8023dcf7 &lt;printk+23&gt;: mov    %rdx,0x30<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dcfc &lt;printk+28&gt;: mov    %rcx,0x38<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dd01 &lt;printk+33&gt;: mov    %rax,0x8<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dd06 &lt;printk+38&gt;: lea    0x20<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>,%rax
+0xffffffff8023dd0b &lt;printk+43&gt;: mov    %r8,0x40<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dd10 &lt;printk+48&gt;: mov    %r9,0x48<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dd15 &lt;printk+53&gt;: movl   $0x8,<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dd1c &lt;printk+60&gt;: movl   $0x30,0x4<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dd24 &lt;printk+68&gt;: mov    %rax,0x10<span style="color:#f92672">(</span>%rsp<span style="color:#f92672">)</span>
+0xffffffff8023dd29 &lt;printk+73&gt;: callq  0xffffffff8023d980 &lt;vprintk&gt;
+0xffffffff8023dd2e &lt;printk+78&gt;: add    $0xd8,%rsp
+0xffffffff8023dd35 &lt;printk+85&gt;: retq   
+End of assembler dump.
+</code></pre></div><h1 id="如何解释汇编语言eabi-c函数调用与arm寄存器的映射">如何解释汇编语言（EABI C函数调用与ARM寄存器的映射）</h1>
+<p>首先第一步，我们需要通过使用OBJDUMP或在vmlinux镜像中使用gdb反汇编kernel函数，如上文所述。例如，这是add_range()内核函数的反汇编，我将演示这些是如何工作的。取决于编译器的操作，有些信息可能会有差异，不过它总是有帮助的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#gdb disassemble add_range</span>
+Dump of assembler code <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">function</span> add_range:
+   0x8004c4d8 &lt;+0&gt;:    mov    r12, sp
+   0x8004c4dc &lt;+4&gt;:    push    <span style="color:#f92672">{</span>r4, r5, r6, r7, r11, r12, lr, pc<span style="color:#f92672">}</span>
+   0x8004c4e0 &lt;+8&gt;:    sub    r11, r12, <span style="color:#75715e">#4</span>
+   0x8004c4e4 &lt;+12&gt;:    ldrd    r6, <span style="color:#f92672">[</span>r11, <span style="color:#75715e">#4]</span>
+   0x8004c4e8 &lt;+16&gt;:    ldrd    r4, <span style="color:#f92672">[</span>r11, <span style="color:#75715e">#12]</span>
+   0x8004c4ec &lt;+20&gt;:    cmp    r7, r5
+   0x8004c4f0 &lt;+24&gt;:    cmpeq    r6, r4
+   0x8004c4f4 &lt;+28&gt;:    bcs    0x8004c510 &lt;add_range+56&gt;
+   0x8004c4f8 &lt;+32&gt;:    cmp    r2, r1
+   0x8004c4fc &lt;+36&gt;:    lsllt    r3, r2, <span style="color:#75715e">#4</span>
+   0x8004c500 &lt;+40&gt;:    addlt    r2, r2, <span style="color:#75715e">#1</span>
+   0x8004c504 &lt;+44&gt;:    addlt    r1, r0, r3
+   0x8004c508 &lt;+48&gt;:    strdlt    r6, <span style="color:#f92672">[</span>r0, r3<span style="color:#f92672">]</span>
+   0x8004c50c &lt;+52&gt;:    strdlt    r4, <span style="color:#f92672">[</span>r1, <span style="color:#75715e">#8]</span>
+   0x8004c510 &lt;+56&gt;:    mov    r0, r2
+   0x8004c514 &lt;+60&gt;:    ldm    sp, <span style="color:#f92672">{</span>r4, r5, r6, r7, r11, sp, pc<span style="color:#f92672">}</span>
+End of assembler dump.
+</code></pre></div><h2 id="相应的kernel-c函数">相应的kernel c函数</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">add_range</span>(<span style="color:#66d9ef">struct</span> range <span style="color:#f92672">*</span>range, <span style="color:#66d9ef">int</span> az, <span style="color:#66d9ef">int</span> nr_range, u64 start, u64 end)
+{
+        <span style="color:#66d9ef">if</span> (start <span style="color:#f92672">&gt;=</span> end)
+                <span style="color:#66d9ef">return</span> nr_range;
+        <span style="color:#75715e">/* Out of slots: */</span>
+        <span style="color:#66d9ef">if</span> (nr_range <span style="color:#f92672">&gt;=</span> az)
+                <span style="color:#66d9ef">return</span> nr_range;
+        range[nr_range].start <span style="color:#f92672">=</span> start;
+        range[nr_range].end <span style="color:#f92672">=</span> end;
+        nr_range<span style="color:#f92672">++</span>;
+        <span style="color:#66d9ef">return</span> nr_range;
+}
+</code></pre></div><p>让我们来分析前三行，这里r12=IP(Intra-Procedure-call scratch register),r11=FP(Frame pointer).FP保存函数到函数之间的参数轨迹，是函数栈的一个栈帧，可以查看基础帧布局获取更多信息。所以简单来说，SP是当前栈指针的寄存器，而FP是曾经栈的寄存器，和PC和LR的关系类似。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> 0x8004c4d8 &lt;+0&gt;:    mov    r12, sp   /*get a copy of sp*/
+ 0x8004c4dc &lt;+4&gt;:    push    <span style="color:#f92672">{</span>r4, r5, r6, r7, r11, r12, lr, pc<span style="color:#f92672">}</span> /*Save the frame,link register,program counter and other Register on to the stack */
+ 0x8004c4e0 &lt;+8&gt;:    sub    r11, r12, <span style="color:#75715e">#4 /*Set the new frame pointer.*/</span>
+</code></pre></div><p>接下来的2条指令，从FP指针传送了4字节和12字节到r6和r4寄存器用于函数调用，换句话说 r11+#4的值在r6中保存，r11+#12的值在r4中保存.</p>
+<p>注意：LORD被用来保存双字指令，然而其中的内容将被加载到r7和r5寄存器。这个函数调用被用来处理64位数据，所以64位数据只能在栈中操纵。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> 0x8004c4e4 &lt;+12&gt;:    ldrd    r6, <span style="color:#f92672">[</span>r11, <span style="color:#75715e">#4]</span>
+ 0x8004c4e8 &lt;+16&gt;:    ldrd    r4, <span style="color:#f92672">[</span>r11, <span style="color:#75715e">#12]</span>
+</code></pre></div><p>注意：前四个寄存器r0-r3被用来在子函数中传值和从函数中返回值，所以<strong>R0=range,R1=az,R2=nr_range,R3=start,R4=end.</strong></p>
+<p>下一条指令可以很简单的映射到c代码。</p>
+<p>注意：Underlying mapping somewhat different from the normal C to Assembly conversion mapping because here 64-bit value is being passed in Function call argument which is u64 start and u64 end and to deal with 64 bit data it has to be stored in register pair and can be retrived using ldrd instruction from stack using  frame pointer.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> 0x8004c4ec &lt;+20&gt;:    cmp    r7, r5    /*first instruction compare r7 and r5 register i.e store <span style="color:#ae81ff">32</span> bit LSB <span style="color:#66d9ef">for</span> start &amp; End whose value is stored in stack.       
+ 0x8004c4f0 &lt;+24&gt;:    cmpeq    r6, r4  /*This next instruction performs an comparison only <span style="color:#66d9ef">if</span> the result of above  <span style="color:#f92672">{</span> cmp    r7, r5 <span style="color:#f92672">}</span> instruction found true<span style="color:#f92672">(</span>i.e r7<span style="color:#f92672">=</span>r5<span style="color:#f92672">)</span>. 
+ 0x8004c4f4 &lt;+28&gt;:    bcs    0x8004c510 &lt;add_range+56&gt;
+ 0x8004c4f8 &lt;+32&gt;:    cmp    r2, r1   /*This instruction compare values stored in resisters r2 and r1 which are passed argument values i.e nr_range and az. 
+
+Corresponding C code is 
+
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>start &gt;<span style="color:#f92672">=</span> end<span style="color:#f92672">)</span>
+                <span style="color:#66d9ef">return</span> nr_range;
+/* Out of slots: */
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>nr_range &gt;<span style="color:#f92672">=</span> az<span style="color:#f92672">)</span>
+                <span style="color:#66d9ef">return</span> nr_range;
+</code></pre></div><p>让我们看下面的指令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">0x8004c4fc &lt;+36&gt;:    lsllt    r3, r2, <span style="color:#75715e">#4</span> 
+0x8004c500 &lt;+40&gt;:    addlt    r2, r2, <span style="color:#75715e">#1</span>
+0x8004c504 &lt;+44&gt;:    addlt    r1, r0, r3
+0x8004c508 &lt;+48&gt;:    strdlt    r6, <span style="color:#f92672">[</span>r0, r3<span style="color:#f92672">]</span>
+0x8004c50c &lt;+52&gt;:    strdlt    r4, <span style="color:#f92672">[</span>r1, <span style="color:#75715e">#8]</span>
+
+Corresponding C code is 
+
+range<span style="color:#f92672">[</span>nr_range<span style="color:#f92672">]</span>.start <span style="color:#f92672">=</span> start;
+        range<span style="color:#f92672">[</span>nr_range<span style="color:#f92672">]</span>.end <span style="color:#f92672">=</span> end;
+        nr_range++;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">0x8004c510 &lt;+56&gt;:    mov    r0, r2 /*move r2 content into r0 register which can be <span style="color:#66d9ef">return</span> back and As I said R0-R3 are also used to hold <span style="color:#66d9ef">return</span> value from <span style="color:#66d9ef">function</span>.
+0x8004c514 &lt;+60&gt;:    ldm    sp, <span style="color:#f92672">{</span>r4, r5, r6, r7, r11, sp, pc<span style="color:#f92672">}</span> /*LDM is used to load multiple instructions and similar to  POP stack instruction.
+
+Corresponding C code is
+ 
+    <span style="color:#66d9ef">return</span> nr_range;
+</code></pre></div><p>这里是ARM寄存器的定义，请记住这些寄存器当你映射C函数到ARM寄存器时，更多的信息可以在这里被找到。</p>
+<p>注意：不要忘了去看<a href="http://www.coranac.com/tonc/text/asm.htm">Tour of ARM Assembly</a>,这会帮助理解更深入的细节，等你做完了这些，我打赌你应该可以写一些不错的ARM汇编，至少能看懂它。</p>
+<p>参考资料：</p>
+<ol>
+<li><a href="http://infocenter.arm.com/help/topic/com.arm.doc.ihi0042e/IHI0042E_aapcs.pdf">Procedure Call Standard for the ARM® Architecture</a></li>
+<li><a href="https://www.cl.cam.ac.uk/~fms27/teaching/2001-02/arm-project/02-sort/apcs.txt">ARM Procedure Call Standard</a></li>
+<li><a href="http://liris.cnrs.fr/~mmrissa/lib/exe/fetch.php?media=armv7-a-r-manual.pdf">Arm Instruction set manual</a></li>
+</ol>
+</div>
         <div class="post-footer">
             <div class="info">
                 <span class="separator"><a class="category" href="/categories/%E5%86%85%E6%A0%B8%E4%B9%8B%E6%97%85/">内核之旅</a></span>
