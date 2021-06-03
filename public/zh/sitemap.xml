@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://example.org/posts/zh/toolsinlinux/init-in-ubuntu/</loc>
+    <lastmod>2021-06-01T21:29:38+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://example.org/categories/</loc>
     <lastmod>2021-06-01T21:29:38+08:00</lastmod>
     <xhtml:link
@@ -15,6 +20,11 @@
                 hreflang="zh"
                 href="http://example.org/categories/"
                 />
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/linux%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2021-06-01T21:29:38+08:00</lastmod>
   </url>
   
   <url>
@@ -45,6 +55,11 @@
                 hreflang="zh"
                 href="http://example.org/tags/"
                 />
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/%E5%86%85%E6%A0%B8%E4%B9%8B%E6%97%85/</loc>
+    <lastmod>2021-06-01T21:29:38+08:00</lastmod>
   </url>
   
   <url>
@@ -84,11 +99,6 @@
   
   <url>
     <loc>http://example.org/tags/linuxkernel%E8%B0%83%E8%AF%95/</loc>
-    <lastmod>2021-05-28T11:28:48+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/categories/%E5%86%85%E6%A0%B8%E4%B9%8B%E6%97%85/</loc>
     <lastmod>2021-05-28T11:28:48+08:00</lastmod>
   </url>
   
