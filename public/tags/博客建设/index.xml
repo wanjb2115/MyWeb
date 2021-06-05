@@ -7,18 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>2020-2021 鲁ICP备20020558号-1</copyright>
-    <lastBuildDate>Tue, 18 May 2021 22:54:48 +0800</lastBuildDate>
-    
-	<atom:link href="http://example.org/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 18 May 2021 22:54:48 +0800</lastBuildDate><atom:link href="http://example.org/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>博客，你好</title>
       <link>http://example.org/posts/zh/init-chinese/</link>
       <pubDate>Tue, 18 May 2021 22:54:48 +0800</pubDate>
       
       <guid>http://example.org/posts/zh/init-chinese/</guid>
-      <description>关于博客的第一篇介绍</description>
+      
+        <description>关于博客的第一篇介绍</description>
+      
     </item>
     
   </channel>

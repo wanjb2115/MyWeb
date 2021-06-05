@@ -7,18 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>2020-2021 鲁ICP备20020558号-1</copyright>
-    <lastBuildDate>Fri, 28 May 2021 11:28:48 +0800</lastBuildDate>
-    
-	<atom:link href="http://example.org/tags/linuxkernel%E8%B0%83%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Fri, 28 May 2021 11:28:48 +0800</lastBuildDate><atom:link href="http://example.org/tags/linuxkernel%E8%B0%83%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>通过System Map调试分析Kernel panics和Kernel Oopses</title>
       <link>http://example.org/posts/zh/kerneldebug/systemmap/</link>
       <pubDate>Fri, 28 May 2021 11:28:48 +0800</pubDate>
       
       <guid>http://example.org/posts/zh/kerneldebug/systemmap/</guid>
-      <description>通过System Map调试分析Kernel panics和Kernel Oopses</description>
+      
+        <description>通过System Map调试分析Kernel panics和Kernel Oopses</description>
+      
     </item>
     
   </channel>
