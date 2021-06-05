@@ -7,18 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>2020-2021 鲁ICP备20020558号-1</copyright>
-    <lastBuildDate>Wed, 19 May 2021 19:14:44 +0800</lastBuildDate>
-    
-	<atom:link href="http://example.org/tags/c%E8%AF%AD%E8%A8%80/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 19 May 2021 19:14:44 +0800</lastBuildDate><atom:link href="http://example.org/tags/c%E8%AF%AD%E8%A8%80/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Static与存储类别</title>
       <link>http://example.org/posts/zh/codinglanguage/static/</link>
       <pubDate>Wed, 19 May 2021 19:14:44 +0800</pubDate>
       
       <guid>http://example.org/posts/zh/codinglanguage/static/</guid>
-      <description>关于C语言中的关键字Static</description>
+      
+        <description>关于C语言中的关键字Static</description>
+      
     </item>
     
   </channel>
