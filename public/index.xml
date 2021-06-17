@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>2020-2021 鲁ICP备20020558号-1</copyright>
-    <lastBuildDate>Tue, 01 Jun 2021 21:29:38 +0800</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 17 Jun 2021 20:28:48 +0800</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Arm64上的Syzkaller之旅</title>
+      <link>http://example.org/posts/zh/kerneldebug/syzkaller/</link>
+      <pubDate>Thu, 17 Jun 2021 20:28:48 +0800</pubDate>
+      
+      <guid>http://example.org/posts/zh/kerneldebug/syzkaller/</guid>
+      
+        <description>如何基于Qemu使用Syzkaller对Arm64平台Linux Kernel进行测试</description>
+      
+    </item>
+    
     <item>
       <title>APT in ubuntu init</title>
       <link>http://example.org/posts/zh/toolsinlinux/init-in-ubuntu/</link>

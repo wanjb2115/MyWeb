@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html  dir="ltr" lang="zh" data-theme=""><head>
+    <title> 万家兵 | Arm64上的Syzkaller之旅 </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.68.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="自由 | 快乐">
+    
+    
+    
+    
+    <link rel="stylesheet"
+        href="/css/main.min.dffd6b2402f7f446a1c67600aedf73f95b7193004867c7d40daae2e502a376ed.css"
+        integrity="sha256-3/1rJAL39EahxnYArt9z&#43;VtxkwBIZ8fUDari5QKjdu0="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    
+    <link rel="stylesheet"
+        href="/css/markupHighlight.min.cc84ed683057cc175ddfa738ea6ba2d5c882b95cb64f50bf9be918cb3791887b.css"
+        integrity="sha256-zITtaDBXzBdd36c46mui1ciCuVy2T1C/m&#43;kYyzeRiHs="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <link rel="canonical" href="/posts/zh/kerneldebug/syzkaller/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="/js/anatole-theme-switcher.min.2c507695a28320822cee065375387eac9bc9f3dfd49d4dcf84bbaca2b8efb30c.js"
+                integrity="sha256-LFB2laKDIIIs7gZTdTh&#43;rJvJ89/UnU3PhLusorjvsww="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Arm64上的Syzkaller之旅"/>
+<meta name="twitter:description" content="如何基于Qemu使用Syzkaller对Arm64平台Linux Kernel进行测试"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="/image/head.jpg" alt="profile picture">
+            <h3 title=""><a href="/">冰冰的小屋</a></h3>
+            <div class="description">
+                <p>自由 | 快乐</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy;  2020-2021 鲁ICP备20020558号-1 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">主页</a></li>
+        
+            
+            <li><a 
+                   href="/posts/"
+                        
+                   title="">博客</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">关于</a></li>
+        
+        
+            
+                <li><a href="/"
+                       title="中文">中文</a>
+                </li>
+            
+                <li><a href="/en/"
+                       title="EN">EN</a>
+                </li>
+            
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <div class="post-title">
+                <h3>Arm64上的Syzkaller之旅</h3>
+                
+            </div>
+
+            <h1 id="syzkaller">Syzkaller</h1>
+<p>syzkaller ([siːzˈkɔːlə]) 是一个无监督的，全覆盖的，引导内核的模糊测试器。
+支持的操作系统：Akaros、FreeBSD、Fuchsia、gVisor、Linux、NetBSD、OpenBSD、Windows。</p>
+<p>Github链接：<a href="https://github.com/google/syzkaller">Syzkaller</a>.</p>
+<h1 id="安装go">安装Go</h1>
+<p>参考链接：<a href="https://github.com/google/syzkaller/blob/master/docs/linux/setup.md#install">Go安装</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz       
+tar -xf go1.14.2.linux-amd64.tar.gz                          
+mv go goroot
+mkdir gopath
+export GOPATH<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span>/gopath  <span style="color:#75715e"># Syzkaller使用</span>
+export GOROOT<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span>/goroot  <span style="color:#75715e"># Syzkaller使用</span>
+export PATH<span style="color:#f92672">=</span>$GOPATH/bin:$PATH <span style="color:#75715e"># 添加环境变量</span>
+export PATH<span style="color:#f92672">=</span>$GOROOT/bin:$PATH <span style="color:#75715e"># 添加环境变量</span>
+</code></pre></div><p>下载新版本go压缩包，解压后，在文件夹<em>bin</em>目录可得到go编译器，把当前目录添加到环境变量PATH中，即可全局使用go编译器。</p>
+<p>使用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">go version
+</code></pre></div><p>查看go编译器版本</p>
+<h1 id="安装qemu">安装Qemu</h1>
+<p>参考链接：<a href="https://github.com/google/syzkaller/blob/master/docs/linux/setup_linux-host_qemu-vm_arm64-kernel.md">Qemu安装</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://download.qemu.org/qemu-6.0.0.tar.xz
+tar -xvf qemu-6.0.0.tar.xz
+</code></pre></div><p>下载新版本qemu压缩包，解压后，进入目录运行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./configure
+make -j4
+</code></pre></div><blockquote>
+<p>若出现“ERROR: Cannot find Ninja”
+安装</p>
+</blockquote>
+<blockquote>
+<p><em>sudo apt-get install ninja-build</em></p>
+</blockquote>
+<p><em>出现其他错误，安装相应的依赖库</em></p>
+<p>make编译好后，在 <em>build/aarch64-softmmu</em> 文件夹内可以找到qemu模拟器程序 <em>qemu-system-aarch64</em>.</p>
+<h1 id="安装交叉编译链">安装交叉编译链</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://releases.linaro.org/components/toolchain/binaries/latest-7/aarch64-linux-gnu/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+tar -xvf gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+</code></pre></div><p>下载新版本*aarch64-linux-gnu-*交叉编译工具包，解压后，在文件夹bin目录可得到交叉编译器，把bin目录添加到环境变量PATH中，即可全局使用交叉编译工具。</p>
+<h1 id="制作磁盘映像">制作磁盘映像</h1>
+<p>参考链接：<a href="https://github.com/google/syzkaller/blob/master/docs/linux/setup_linux-host_qemu-vm_arm64-kernel.md">制作磁盘映像</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone git://git.buildroot.net/buildroot         
+cd buildroot
+make menuconfig
+</code></pre></div><p>选择</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Target options
+    Target Architecture - Aarch64 <span style="color:#f92672">(</span>little endian<span style="color:#f92672">)</span>
+Toolchain type
+    External toolchain - Linaro AArch64
+System Configuration
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enable root login with password
+        <span style="color:#f92672">(</span> <span style="color:#f92672">)</span> Root password <span style="color:#f92672">=</span> set your password using this option
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Run a getty <span style="color:#f92672">(</span>login prompt<span style="color:#f92672">)</span> after boot  ---&gt;
+    TTY port - ttyAMA0
+Target packages
+    <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span>   Show packages that are also provided by busybox
+    Networking applications
+        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> dhcpcd
+        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> iproute2
+        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> openssh
+Filesystem images
+    <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> ext2/3/4 root filesystem
+        ext2/3/4 variant - ext3
+        exact size in blocks - <span style="color:#ae81ff">6000000</span>
+    <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> tar the root filesystem
+</code></pre></div><p>运行</p>
+<pre><code>make
+</code></pre><p>在编译之后，确保 <em>output/images/rootfs.ext3</em> 文件存在。</p>
+<h1 id="编译内核">编译内核</h1>
+<p>进入Linux源码目录，运行</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ARCH<span style="color:#f92672">=</span>arm64 CROSS_COMPILE<span style="color:#f92672">=</span>aarch64-linux-gnu- make defconfig
+vim .config
+</code></pre></div><p>修改配置文件中的如下选项：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">CONFIG_KCOV<span style="color:#f92672">=</span>y
+CONFIG_KASAN<span style="color:#f92672">=</span>y
+CONFIG_DEBUG_INFO<span style="color:#f92672">=</span>y
+CONFIG_CMDLINE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;console=ttyAMA0&#34;</span>
+CONFIG_KCOV_INSTRUMENT_ALL<span style="color:#f92672">=</span>y
+CONFIG_DEBUG_FS<span style="color:#f92672">=</span>y
+CONFIG_NET_9P<span style="color:#f92672">=</span>y
+CONFIG_NET_9P_VIRTIO<span style="color:#f92672">=</span>y
+CONFIG_CROSS_COMPILE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;aarch64-linux-gnu-&#34;</span>
+</code></pre></div><p>编译内核</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ARCH<span style="color:#f92672">=</span>arm64 CROSS_COMPILE<span style="color:#f92672">=</span>aarch64-linux-gnu- make -j4
+</code></pre></div><p>在编译成功后，你应该可以看到 <em>arch/arm64/boot/Image</em> 文件生成。</p>
+<h1 id="测试qemu虚拟机">测试Qemu虚拟机</h1>
+<p>在qemu模拟器目录下运行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./aarch64-softmmu/qemu-system-aarch64 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -machine virt <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -cpu cortex-a57 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -nographic -smp <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -hda /你的磁盘映像目录/rootfs.ext3 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -kernel /你的Linux源码目录/arch/arm64/boot/Image <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -append <span style="color:#e6db74">&#34;console=ttyAMA0 root=/dev/vda oops=panic panic_on_warn=1 panic=-1 ftrace_dump_on_oops=orig_cpu debug earlyprintk=serial slub_debug=UZ&#34;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -m <span style="color:#ae81ff">2048</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -net user,hostfwd<span style="color:#f92672">=</span>tcp::10023-:22 -net nic
+</code></pre></div><p>如果顺利的话，可以通过qemu模拟器运行终端，现在你有一个Linux终端了。</p>
+<h1 id="配置qemu虚拟机">配置Qemu虚拟机</h1>
+<h2 id="配置虚拟机网络和kcov">配置虚拟机网络和kcov</h2>
+<p>在 <em>/etc/init.d/S50sshd</em> 文件的最上面添加以下配置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ifconfig eth0 up
+dhcpcd
+mount -t debugfs none /sys/kernel/debug
+chmod <span style="color:#ae81ff">777</span> /sys/kernel/debug/kcov
+</code></pre></div><h2 id="生成ssh-key">生成ssh key</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">/usr/bin/ssh-keygen -A
+</code></pre></div><h2 id="配置sshd_config">配置sshd_config</h2>
+<p>打开 <em>/etc/ssh/sshd_config</em> ，修改成如下配置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PermitRootLogin yes
+PubkeyAuthentication yes
+AuthorizedKeysFile      /.ssh/authorized_keys
+PasswordAuthentication yes
+</code></pre></div><h2 id="重启虚拟机">重启虚拟机</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">reboot
+</code></pre></div><h2 id="测试主机与虚拟机的通讯">测试主机与虚拟机的通讯</h2>
+<p>返回主机，新开终端，保持虚拟机运行，使用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -o 
+</code></pre></div><p>生成密钥对，生成的密钥对在 <em>~/.ssh</em> 文件夹中</p>
+<p>通过命令:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -i /home/wanjb/.ssh/id_rsa root@localhost -p <span style="color:#ae81ff">10023</span>
+</code></pre></div><p>输入虚拟机密码，查看能否成功连接虚拟机。</p>
+<h1 id="编译syzkaller">编译Syzkaller</h1>
+<p>下载Syzkaller:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">go get -u -d github.com/google/syzkaller/prog
+cd gopath/src/github.com/google/syzkaller/
+CC<span style="color:#f92672">=</span>gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-g++ <span style="color:#75715e"># 改成你的交叉编译链</span>
+make TARGETARCH<span style="color:#f92672">=</span>arm64
+</code></pre></div><p>编译完成后在 <em>bin</em> 目录得到syz-manager.</p>
+<h1 id="配置syzkaller">配置Syzkaller</h1>
+<p>添加syzkaller配置文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">vi my.cfg
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">{</span>
+    <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;QEMU-aarch64&#34;</span>,
+    <span style="color:#e6db74">&#34;target&#34;</span>: <span style="color:#e6db74">&#34;linux/arm64&#34;</span>,
+    <span style="color:#e6db74">&#34;http&#34;</span>: <span style="color:#e6db74">&#34;:56700&#34;</span>,
+    <span style="color:#e6db74">&#34;workdir&#34;</span>: <span style="color:#e6db74">&#34;/path/to/a/dir/to/store/syzkaller/corpus&#34;</span>, <span style="color:#75715e"># 工作路径，可以自定义</span>
+    <span style="color:#e6db74">&#34;kernel_obj&#34;</span>: <span style="color:#e6db74">&#34;/path/to/linux/build/dir&#34;</span>, <span style="color:#75715e"># Linux源代码路径</span>
+    <span style="color:#e6db74">&#34;syzkaller&#34;</span>: <span style="color:#e6db74">&#34;/path/to/syzkaller/arm64/&#34;</span>, <span style="color:#75715e"># Syzkaller文件夹路径</span>
+    <span style="color:#e6db74">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;/path/to/rootfs.ext3&#34;</span>, <span style="color:#75715e"># 磁盘映像</span>
+    <span style="color:#e6db74">&#34;sshkey&#34;</span>: <span style="color:#e6db74">&#34;/path/to/ida_rsa&#34;</span>, <span style="color:#75715e"># 主机ssh公钥</span>
+    <span style="color:#e6db74">&#34;procs&#34;</span>: 8,
+    <span style="color:#e6db74">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;qemu&#34;</span>,
+    <span style="color:#e6db74">&#34;vm&#34;</span>: <span style="color:#f92672">{</span>
+        <span style="color:#e6db74">&#34;count&#34;</span>: 1,
+        <span style="color:#e6db74">&#34;qemu&#34;</span>: <span style="color:#e6db74">&#34;/path/to/qemu-system-aarch64&#34;</span>, <span style="color:#75715e"># qemu模拟器路径</span>
+        <span style="color:#e6db74">&#34;cmdline&#34;</span>: <span style="color:#e6db74">&#34;console=ttyAMA0 root=/dev/vda&#34;</span>,
+        <span style="color:#e6db74">&#34;kernel&#34;</span>: <span style="color:#e6db74">&#34;/path/to/Image&#34;</span>, <span style="color:#75715e"># 编译好的Linux内核镜像</span>
+        <span style="color:#e6db74">&#34;cpu&#34;</span>: 2,
+        <span style="color:#e6db74">&#34;mem&#34;</span>: <span style="color:#ae81ff">2048</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h1 id="使用syzkaller">使用Syzkaller</h1>
+<p>运行</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./syz-manager -config my.cfg
+</code></pre></div><p>之后访问 <em>http://localhost:56700/</em> ,等待一段时间，便可查看syzkaller运行结果。</p>
+<p><em>注意：在运行syzkaller之前需要退出qemu，让出磁盘映像。</em></p>
+<p>Enjoy~<img src="http://wanjiabing.top/emoj/2018new_wu_org.png" alt="捂脸"></p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                <span class="separator"><a class="category" href="/categories/%E5%86%85%E6%A0%B8%E4%B9%8B%E6%97%85/">内核之旅</a></span>
+                <span class="separator"><a class="tag" href="/tags/linuxkernel%E8%B0%83%E8%AF%95/">LinuxKernel调试</a></span>
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
