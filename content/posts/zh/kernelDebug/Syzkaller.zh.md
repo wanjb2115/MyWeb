@@ -167,7 +167,7 @@ dhcpcd
 mount -t debugfs none /sys/kernel/debug
 chmod 777 /sys/kernel/debug/kcov
 ```
-## 生成ssh key
+注释以下语句：
 ```bash
 /usr/bin/ssh-keygen -A
 ```
@@ -177,7 +177,7 @@ chmod 777 /sys/kernel/debug/kcov
 ```bash
 PermitRootLogin yes
 PubkeyAuthentication yes
-AuthorizedKeysFile      /.ssh/authorized_keys
+AuthorizedKeysFile      /root/.ssh/authorized_keys
 PasswordAuthentication yes
 ```
 
@@ -188,6 +188,9 @@ reboot
 ```
 
 ## 测试主机与虚拟机的通讯
+
+参考链接：[使用密钥对登录服务器](https://www.jianshu.com/p/fab3252b3192)
+
 返回主机，新开终端，保持虚拟机运行，使用
 ```bash
 ssh-keygen -o 
@@ -196,10 +199,21 @@ ssh-keygen -o
 
 通过命令:
 ```bash
-ssh -i /home/wanjb/.ssh/id_rsa root@localhost -p 10023
+ssh root@localhost -p 10023
 ```
 输入虚拟机密码，查看能否成功连接虚拟机。
 
+通过命令：
+```bash
+scp -P 10023 ~/.ssh/id_rsa.pub root@localhost:/root/.ssh/authorized_keys
+```
+将公钥拷贝至虚拟机中
+
+通过命令:
+```bash
+ssh -i /home/wanjb/.ssh/id_rsa root@localhost -p 10023
+```
+查看能否成功连接虚拟机。
 
 # 编译Syzkaller
 下载Syzkaller:

@@ -240,23 +240,30 @@ CONFIG_CROSS_COMPILE<span style="color:#f92672">=</span><span style="color:#e6db
 dhcpcd
 mount -t debugfs none /sys/kernel/debug
 chmod <span style="color:#ae81ff">777</span> /sys/kernel/debug/kcov
-</code></pre></div><h2 id="生成ssh-key">生成ssh key</h2>
+</code></pre></div><p>注释以下语句：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">/usr/bin/ssh-keygen -A
 </code></pre></div><h2 id="配置sshd_config">配置sshd_config</h2>
 <p>打开 <em>/etc/ssh/sshd_config</em> ，修改成如下配置：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PermitRootLogin yes
 PubkeyAuthentication yes
-AuthorizedKeysFile      /.ssh/authorized_keys
+AuthorizedKeysFile      /root/.ssh/authorized_keys
 PasswordAuthentication yes
 </code></pre></div><h2 id="重启虚拟机">重启虚拟机</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">reboot
 </code></pre></div><h2 id="测试主机与虚拟机的通讯">测试主机与虚拟机的通讯</h2>
+<p>参考链接：<a href="https://www.jianshu.com/p/fab3252b3192">使用密钥对登录服务器</a></p>
 <p>返回主机，新开终端，保持虚拟机运行，使用</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -o 
 </code></pre></div><p>生成密钥对，生成的密钥对在 <em>~/.ssh</em> 文件夹中</p>
 <p>通过命令:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -i /home/wanjb/.ssh/id_rsa root@localhost -p <span style="color:#ae81ff">10023</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh root@localhost -p <span style="color:#ae81ff">10023</span>
 </code></pre></div><p>输入虚拟机密码，查看能否成功连接虚拟机。</p>
+<p>通过命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">scp -P <span style="color:#ae81ff">10023</span> ~/.ssh/id_rsa.pub root@localhost:/root/.ssh/authorized_keys
+</code></pre></div><p>将公钥拷贝至虚拟机中</p>
+<p>通过命令:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -i /home/wanjb/.ssh/id_rsa root@localhost -p <span style="color:#ae81ff">10023</span>
+</code></pre></div><p>查看能否成功连接虚拟机。</p>
 <h1 id="编译syzkaller">编译Syzkaller</h1>
 <p>下载Syzkaller:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">go get -u -d github.com/google/syzkaller/prog
