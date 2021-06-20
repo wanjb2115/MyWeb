@@ -37,10 +37,16 @@ go version
 ```
 查看go编译器版本
 
-# 安装Qemu
+# 安装Qemu 
 
 参考链接：[Qemu安装](https://github.com/google/syzkaller/blob/master/docs/linux/setup_linux-host_qemu-vm_arm64-kernel.md)
 
+## apt-get安装
+```bash
+sudo apt-get install qemu-system-aarch64
+```
+
+## 源码编译
 ```bash
 wget https://download.qemu.org/qemu-6.0.0.tar.xz
 tar -xvf qemu-6.0.0.tar.xz
@@ -179,6 +185,12 @@ PermitRootLogin yes
 PubkeyAuthentication yes
 AuthorizedKeysFile      /root/.ssh/authorized_keys
 PasswordAuthentication yes
+```
+
+创建公钥目录
+```bash
+cd ~
+mkdir .ssh
 ```
 
 ## 重启虚拟机

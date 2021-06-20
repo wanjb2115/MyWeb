@@ -157,6 +157,9 @@ export PATH<span style="color:#f92672">=</span>$GOROOT/bin:$PATH <span style="co
 </code></pre></div><p>查看go编译器版本</p>
 <h1 id="安装qemu">安装Qemu</h1>
 <p>参考链接：<a href="https://github.com/google/syzkaller/blob/master/docs/linux/setup_linux-host_qemu-vm_arm64-kernel.md">Qemu安装</a></p>
+<h2 id="apt-get安装">apt-get安装</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt-get install qemu-system-aarch64
+</code></pre></div><h2 id="源码编译">源码编译</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://download.qemu.org/qemu-6.0.0.tar.xz
 tar -xvf qemu-6.0.0.tar.xz
 </code></pre></div><p>下载新版本qemu压缩包，解压后，进入目录运行：</p>
@@ -248,6 +251,9 @@ chmod <span style="color:#ae81ff">777</span> /sys/kernel/debug/kcov
 PubkeyAuthentication yes
 AuthorizedKeysFile      /root/.ssh/authorized_keys
 PasswordAuthentication yes
+</code></pre></div><p>创建公钥目录</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd ~
+mkdir .ssh
 </code></pre></div><h2 id="重启虚拟机">重启虚拟机</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">reboot
 </code></pre></div><h2 id="测试主机与虚拟机的通讯">测试主机与虚拟机的通讯</h2>
