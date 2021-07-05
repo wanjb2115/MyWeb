@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html  dir="ltr" lang="zh" data-theme=""><head>
-    <title> 万家兵 | 浮生日记 </title>
+    <title> 万家兵 | ArchLinux安装syzkaller简记 </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.68.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -33,10 +33,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
-    <link rel="canonical" href="/categories/%E6%B5%AE%E7%94%9F%E6%97%A5%E8%AE%B0/">
+    <link rel="canonical" href="/posts/zh/toolsinlinux/qemu-in-archlinux/">
 
     
-    <link rel="alternate" type="application/rss+xml" href="/categories/%E6%B5%AE%E7%94%9F%E6%97%A5%E8%AE%B0/index.xml" title="冰冰的小屋" />
     
     
     
@@ -55,8 +54,8 @@
                 crossorigin="anonymous"></script>
     
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="浮生日记"/>
-<meta name="twitter:description" content="自由 | 快乐"/>
+<meta name="twitter:title" content="ArchLinux安装syzkaller简记"/>
+<meta name="twitter:description" content="尝试ArchLinux上运行syzkaller"/>
 
 
     
@@ -130,54 +129,37 @@
 
     <div class="autopagerize_page_element">
         <div class="content">
-    <div class="archive  animated fadeInDown ">
-        <ul class="list-with-title">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
             
-                <div class="listing-title">2021</div>
+            <div class="post-title">
+                <h3>ArchLinux安装syzkaller简记</h3>
                 
-                    <ul class="listing">
-                        <div class="listing-item">
-                            <div class="listing-post"><a href="/posts/zh/journal/journal-202107/" title="浮生日记-2021/07">浮生日记-2021/07</a>
-                                <div class="post-time"><span class="date"> 
-                                                                            07-01
-                                                                            </span></div>
-                            </div>
-                        </div>
-                    </ul>
-                
-                    <ul class="listing">
-                        <div class="listing-item">
-                            <div class="listing-post"><a href="/posts/zh/journal/journal-202106/" title="浮生日记-2021/06">浮生日记-2021/06</a>
-                                <div class="post-time"><span class="date"> 
-                                                                            06-01
-                                                                            </span></div>
-                            </div>
-                        </div>
-                    </ul>
-                
-                    <ul class="listing">
-                        <div class="listing-item">
-                            <div class="listing-post"><a href="/posts/zh/journal/journal-202105/" title="浮生日记-2021/05">浮生日记-2021/05</a>
-                                <div class="post-time"><span class="date"> 
-                                                                            05-31
-                                                                            </span></div>
-                            </div>
-                        </div>
-                    </ul>
-                
-                    <ul class="listing">
-                        <div class="listing-item">
-                            <div class="listing-post"><a href="/posts/zh/init-chinese/" title="博客，你好">博客，你好</a>
-                                <div class="post-time"><span class="date"> 
-                                                                            05-18
-                                                                            </span></div>
-                            </div>
-                        </div>
-                    </ul>
-                
-            
-        </ul>
+            </div>
+
+            <h1 id="qemu">qemu</h1>
+<h2 id="下载qemu">下载qemu</h2>
+<h2 id="安装必要工具和依赖库">安装必要工具和依赖库</h2>
+<p>必要</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pacman -S make pkg-config ninja pixman
+pacman -S --needed base-devel
+</code></pre></div><p>可选</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pacman -S libssh snappy libusb libaio libnfs libiscsi gtk3 libpng fufe3 capstone python-sphinx libgcrypt libslirp 
+</code></pre></div><h1 id="文件系统">文件系统</h1>
+<h2 id="安装必要工具和依赖库-1">安装必要工具和依赖库</h2>
+<p>必要</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pacman -S bc rsync cpio 
+</code></pre></div></div>
+        <div class="post-footer">
+            <div class="info">
+                <span class="separator"><a class="category" href="/categories/%E5%86%85%E6%A0%B8%E4%B9%8B%E6%97%85/">内核之旅</a></span>
+                <span class="separator"><a class="tag" href="/tags/linux%E5%B7%A5%E5%85%B7/">Linux工具</a></span>
+            </div>
+        </div>
+
+        
     </div>
+
 
         </div>
     </div>

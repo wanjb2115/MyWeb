@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html  dir="ltr" lang="zh" data-theme=""><head>
+    <title> 万家兵 | ArchLinux安装简记 </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.68.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="自由 | 快乐">
+    
+    
+    
+    
+    <link rel="stylesheet"
+        href="/css/main.min.dffd6b2402f7f446a1c67600aedf73f95b7193004867c7d40daae2e502a376ed.css"
+        integrity="sha256-3/1rJAL39EahxnYArt9z&#43;VtxkwBIZ8fUDari5QKjdu0="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    
+    <link rel="stylesheet"
+        href="/css/markupHighlight.min.cc84ed683057cc175ddfa738ea6ba2d5c882b95cb64f50bf9be918cb3791887b.css"
+        integrity="sha256-zITtaDBXzBdd36c46mui1ciCuVy2T1C/m&#43;kYyzeRiHs="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <link rel="canonical" href="/posts/zh/toolsinlinux/init-in-archlinux/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="/js/anatole-theme-switcher.min.2c507695a28320822cee065375387eac9bc9f3dfd49d4dcf84bbaca2b8efb30c.js"
+                integrity="sha256-LFB2laKDIIIs7gZTdTh&#43;rJvJ89/UnU3PhLusorjvsww="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ArchLinux安装简记"/>
+<meta name="twitter:description" content="尝试ArchLinux"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="/image/head.jpg" alt="profile picture">
+            <h3 title=""><a href="/">冰冰的小屋</a></h3>
+            <div class="description">
+                <p>自由 | 快乐</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy;  2020-2021 鲁ICP备20020558号-1 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">主页</a></li>
+        
+            
+            <li><a 
+                   href="/posts/"
+                        
+                   title="">博客</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">关于</a></li>
+        
+        
+            
+                <li><a href="/"
+                       title="中文">中文</a>
+                </li>
+            
+                <li><a href="/en/"
+                       title="EN">EN</a>
+                </li>
+            
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <div class="post-title">
+                <h3>ArchLinux安装简记</h3>
+                
+            </div>
+
+            <p>ArchLinux发行版有非常完整的wiki说明指南，强大的指南可以指导我们迅速上手。</p>
+<p><a href="https://wiki.archlinux.org">ArchWiki</a></p>
+<h1 id="下载archlinux镜像文件">下载ArchLinux镜像文件</h1>
+<p>在ArchLinux下载界面选择合适的下载节点，下载所需的镜像文件。</p>
+<p><a href="https://archlinux.org/download/">Arch下载</a></p>
+<h1 id="制作启动盘">制作启动盘</h1>
+<p>windows系统使用rufus软件制作u盘启动盘，将安装镜像写入u盘中。</p>
+<p><a href="https://rufus.ie/en_US/">rufus</a></p>
+<h1 id="使用esc键进入uefi启动">使用ESC键进入uefi启动</h1>
+<p>重启计算机，按&quot;esc&quot;键选择u盘启动</p>
+<ul>
+<li>注意需要关闭Secure boot *</li>
+</ul>
+<h1 id="进入archlinux安装命令行">进入ArchLinux安装命令行</h1>
+<p>ArchWiki有完整的安装流程，这里仅记录一些要点。</p>
+<p><a href="https://wiki.archlinux.org/title/Installation_guide_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">ArchLinux安装指南</a></p>
+<h2 id="连接无线网">连接无线网</h2>
+<p>使用iwctl连接无线网</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">iwctl
+station xxx connect xxx
+</code></pre></div><p>退出后，测试网络连接是否正常。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ping archlinux.org
+</code></pre></div><h2 id="清理磁盘和进行磁盘分区">清理磁盘和进行磁盘分区</h2>
+<p>使用fdisk清理磁盘</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">fdisk -l
+fdisk /dec/sdxx
+</code></pre></div><h2 id="建立文件系统">建立文件系统</h2>
+<p>磁盘分区完成后为每个磁盘创建相应文件系统。</p>
+<p>uefi分区创建FAT格式;
+swap分区创建SWAP格式;
+主分区可以自定义.</p>
+<h2 id="挂载磁盘和交换分区">挂载磁盘和交换分区</h2>
+<p>swapon 设置交换分区;主分区挂载到/mnt;uefi分区挂载到/mnt/boot.</p>
+<p>× 如果没有boot文件夹可以自己创建 ×</p>
+<h2 id="安装核心文件到挂载磁盘">安装核心文件到挂载磁盘</h2>
+<p>根据wiki指南安装应用程序到/mnt中，建议安装</p>
+<pre><code>pacstrap /mnt base linux linux-firmware dhcpd iwd nano vim
+</code></pre><h2 id="配置自动挂载">配置自动挂载</h2>
+<p>用以下命令生成 fstab 文件 (用 -U 或 -L 选项设置UUID 或卷标)：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+</code></pre></div><p>强烈建议在执行完以上命令后，后检查一下生成的 /mnt/etc/fstab 文件是否正确。</p>
+<h2 id="进入磁盘镜像">进入磁盘镜像</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">arch-chroot /mnt
+</code></pre></div><h2 id="设置相关参数">设置相关参数</h2>
+<p>设置时区，本地化，网络配置等等。</p>
+<p>本地化语言强烈推荐按照wiki指南设置为en_US.UTF-8</p>
+<h2 id="安装必要软件">安装必要软件</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pacman -S git zsh htop
+</code></pre></div><h2 id="设置grub启动选项">设置grub启动选项</h2>
+<h3 id="安装初始化grub">安装初始化grub</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pacman -S grub
+grub-install --target<span style="color:#f92672">=</span>x86_64-efi --efi-directory<span style="color:#f92672">=</span>esp --bootloader-id<span style="color:#f92672">=</span>GRUB
+</code></pre></div><h3 id="安装处理器微码">安装处理器微码</h3>
+<ul>
+<li>AMD：amd-ucode</li>
+<li>Intel：intel-ucode</li>
+</ul>
+<h3 id="更新grub配置信息">更新GRUB配置信息</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre></div><h2 id="设置pacman最快镜像列表">设置pacman最快镜像列表</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pacman -S reflector
+reflector --country China --age <span style="color:#ae81ff">12</span> --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+</code></pre></div><h2 id="重启系统安装完成">重启系统安装完成</h2>
+<h3 id="退出arch-chroot">退出arch-chroot</h3>
+<h3 id="reboot">reboot</h3>
+<h2 id="其他">其他</h2>
+<ul>
+<li>重启系统后对于无线网可使用systemctl start iwd,开启iwd服务</li>
+</ul>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                <span class="separator"><a class="category" href="/categories/%E5%86%85%E6%A0%B8%E4%B9%8B%E6%97%85/">内核之旅</a></span>
+                <span class="separator"><a class="tag" href="/tags/linux%E5%B7%A5%E5%85%B7/">Linux工具</a></span>
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>

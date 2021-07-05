@@ -7,7 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>2020-2021 鲁ICP备20020558号-1</copyright>
-    <lastBuildDate>Tue, 01 Jun 2021 21:29:38 +0800</lastBuildDate><atom:link href="http://example.org/tags/linux%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 01 Jul 2021 21:29:38 +0800</lastBuildDate><atom:link href="http://example.org/tags/linux%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ArchLinux安装syzkaller简记</title>
+      <link>http://example.org/posts/zh/toolsinlinux/qemu-in-archlinux/</link>
+      <pubDate>Thu, 01 Jul 2021 21:29:38 +0800</pubDate>
+      
+      <guid>http://example.org/posts/zh/toolsinlinux/qemu-in-archlinux/</guid>
+      
+        <description>尝试ArchLinux上运行syzkaller</description>
+      
+    </item>
+    
+    <item>
+      <title>ArchLinux安装简记</title>
+      <link>http://example.org/posts/zh/toolsinlinux/init-in-archlinux/</link>
+      <pubDate>Thu, 01 Jul 2021 21:29:38 +0800</pubDate>
+      
+      <guid>http://example.org/posts/zh/toolsinlinux/init-in-archlinux/</guid>
+      
+        <description>尝试ArchLinux</description>
+      
+    </item>
+    
     <item>
       <title>APT in ubuntu init</title>
       <link>http://example.org/posts/zh/toolsinlinux/init-in-ubuntu/</link>
