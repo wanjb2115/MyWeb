@@ -133,3 +133,5 @@ reflector --country China --age 12 --protocol https --sort rate --save /etc/pacm
 ## 其他
 
 - 重启系统后对于无线网可使用systemctl start iwd,开启iwd服务
+- 系统连接网络需要dhcpc自动分配IP地址
+- ssh需要开启sshd服务
