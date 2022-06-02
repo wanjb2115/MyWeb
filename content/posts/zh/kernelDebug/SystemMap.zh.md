@@ -36,11 +36,11 @@ Kernel panic的行为是可以通过设置运行时系统配置，例如hung tas
 
 在Linux中，Syste.map文件是kernel使用的符号表。
 
-当需要某个符号名的地址，或某个地址的符号名时，System.map文件就是必要的。而且该文件对调试kernel panic和kernel oopes十分有效。当CONFIG_KALLSYMS被启用时，Kernel自己进行address-to-name的翻译，所以一些如ksymoops的工具就不需要了。
+当需要某个符号名的地址，或某个地址的符号名时，System.map文件就是必要的。而且该文件对调试kernel panic和kernel oops十分有效。当CONFIG_KALLSYMS被启用时，Kernel自己进行address-to-name的翻译，所以一些如ksymoops的工具就不需要了。
 
 更多细节信息可以参考：[System.map](https://en.wikipedia.org/wiki/System.map).
 
-注意：System.map内的地址可能每次都会变化，换句话说，每次构建kernel都会生成新的System.map，但是必须有已报告kernel panic/Oopes的同一Linux内核的System.map才能调试问题。
+注意：System.map内的地址可能每次都会变化，换句话说，每次构建kernel都会生成新的System.map，但是必须有已报告kernel panic/Oops的同一Linux内核的System.map才能调试问题。
 
 注意在logs中kernel调用栈内，，kernel会寻找与要分析的地址最接近的符号，由于内联，静态和优化，并非所有的函数符号都是可用的，因此有时候报告的函数名称并不是故障所在的位置。
 

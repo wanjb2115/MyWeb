@@ -68,7 +68,7 @@ swapon 设置交换分区;主分区挂载到/mnt;uefi分区挂载到/mnt/boot.
 根据wiki指南安装应用程序到/mnt中，建议安装
 
 ```
-pacstrap /mnt base linux linux-firmware dhcpd iwd nano vim
+pacstrap /mnt base linux linux-firmware dhcpcd iwd nano vim
 ```
 
 ## 配置自动挂载

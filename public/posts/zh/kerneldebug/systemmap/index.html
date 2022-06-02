@@ -155,9 +155,9 @@
 </ul>
 <h2 id="如何通过systemmap去解释oopes">如何通过System.map去解释Oopes</h2>
 <p>在Linux中，Syste.map文件是kernel使用的符号表。</p>
-<p>当需要某个符号名的地址，或某个地址的符号名时，System.map文件就是必要的。而且该文件对调试kernel panic和kernel oopes十分有效。当CONFIG_KALLSYMS被启用时，Kernel自己进行address-to-name的翻译，所以一些如ksymoops的工具就不需要了。</p>
+<p>当需要某个符号名的地址，或某个地址的符号名时，System.map文件就是必要的。而且该文件对调试kernel panic和kernel oops十分有效。当CONFIG_KALLSYMS被启用时，Kernel自己进行address-to-name的翻译，所以一些如ksymoops的工具就不需要了。</p>
 <p>更多细节信息可以参考：<a href="https://en.wikipedia.org/wiki/System.map">System.map</a>.</p>
-<p>注意：System.map内的地址可能每次都会变化，换句话说，每次构建kernel都会生成新的System.map，但是必须有已报告kernel panic/Oopes的同一Linux内核的System.map才能调试问题。</p>
+<p>注意：System.map内的地址可能每次都会变化，换句话说，每次构建kernel都会生成新的System.map，但是必须有已报告kernel panic/Oops的同一Linux内核的System.map才能调试问题。</p>
 <p>注意在logs中kernel调用栈内，，kernel会寻找与要分析的地址最接近的符号，由于内联，静态和优化，并非所有的函数符号都是可用的，因此有时候报告的函数名称并不是故障所在的位置。</p>
 <h2 id="如何调试kernel-panics和oopes">如何调试kernel panics和Oopes</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">67.994406<span style="color:#f92672">]</span> Unable to handle kernel paging request at virtual address 02120bc4
