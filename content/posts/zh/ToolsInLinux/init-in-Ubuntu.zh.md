@@ -12,7 +12,7 @@ sudo apt-get install pkg-config build-essential zsh tmux htop git fakeroot ncurs
 # kernel内核开发：
 sudo apt-get install linux-headers-`uname -r`
 
-# 发生patch
+# 发送patch
 sudo apt-get install cscope libncurses-dev git-email
 
 # sparse

@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "http://wanjiabing.top/"
 languageCode = "zh-CN"
 DefaultContentLanguage = "zh" 
 theme = "anatole"
@@ -9,7 +9,7 @@ title = "冰冰的小屋"
 author = "万家兵"
 description = "自由 | 快乐"
 profilePicture = "image/head.jpg"
-copyright = "2020-2021 鲁ICP备20020558号-1"
+copyright = "2020-2024 鲁ICP备20020558号-1"
 
 singleDateFormat = "2006-01-02 Mon"
 indexDateFormat = "2006-01-02 Mon"
@@ -45,7 +45,7 @@ readMore = true
    description = "自由 | 快乐"
    profilePicture = "image/head.jpg"
    readMore = true
-   copyright = "2020-2021 鲁ICP备20020558号-1"
+   copyright = "2020-2023 鲁ICP备20020558号-1"
 
    [[Languages.zh.menu.main]]
     name = "主页"
